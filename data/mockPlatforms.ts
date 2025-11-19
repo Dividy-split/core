@@ -1,4 +1,4 @@
-
+// data/mockPlatforms.ts
 import { Platform, Category } from '@/types/platform';
 
 export const mockPlatforms: Platform[] = [
@@ -15,7 +15,7 @@ export const mockPlatforms: Platform[] = [
   {
     id: 'disney-plus',
     name: 'Disney+',
-    logo: 'TbBrandDisney',
+    logo: 'SiDisneyplus',
     logoColor: '#113CCF',
     description: 'Contenus Disney, Pixar, Marvel, Star Wars et National Geographic',
     category: 'streaming',
@@ -24,7 +24,7 @@ export const mockPlatforms: Platform[] = [
   {
     id: 'prime-video',
     name: 'Prime Video',
-    logo: 'SiAmazon',
+    logo: 'SiPrimevideo',
     logoColor: '#00A8E1',
     description: 'Service de streaming Amazon avec films et séries',
     category: 'streaming',
