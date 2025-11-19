@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 export default function Home() {
   return (
@@ -14,130 +15,291 @@ export default function Home() {
       {/* Header */}
       <header className="border-b bg-white/50 backdrop-blur-sm dark:bg-zinc-950/50">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <div className="text-xl font-bold">YourBrand</div>
+          <div className="text-xl font-bold">Dividy</div>
           <nav className="flex gap-6">
+            <a href="#how-it-works" className="text-sm font-medium hover:underline">
+              Comment ça marche
+            </a>
+            <a href="#savings" className="text-sm font-medium hover:underline">
+              Économies
+            </a>
             <a href="#features" className="text-sm font-medium hover:underline">
-              Features
-            </a>
-            <a href="#about" className="text-sm font-medium hover:underline">
-              About
-            </a>
-            <a href="#contact" className="text-sm font-medium hover:underline">
-              Contact
+              Avantages
             </a>
           </nav>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="container mx-auto px-4 py-24 text-center">
-        <Badge className="mb-4">New Release</Badge>
+      <section className="container mx-auto px-4 py-12
+       text-center">
+        <Badge className="mb-4 bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+          Économisez jusqu'à 70%
+        </Badge>
         <h1 className="mb-6 text-5xl font-bold tracking-tight md:text-6xl">
-          Welcome to Your
-          <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          Divisez vos abonnements,
+          <span className="bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
             {" "}
-            Amazing Platform
+            pas vos économies
           </span>
         </h1>
         <p className="mx-auto mb-8 max-w-2xl text-lg text-zinc-600 dark:text-zinc-400">
-          Build faster, scale better, and deliver exceptional experiences with
-          our cutting-edge platform. Get started today and transform the way you
-          work.
+          Partagez les coûts de vos abonnements préférés avec vos amis et votre famille. Dividy gère les paiements équitablement et vous aide à économiser des centaines d'euros chaque année.
         </p>
         <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
-          <Button size="lg" className="text-base">
-            Get Started
+          <Button size="lg" className="text-base bg-green-600 hover:bg-green-700">
+            Commencer gratuitement
           </Button>
           <Button size="lg" variant="outline" className="text-base">
-            Learn More
+            En savoir plus
           </Button>
         </div>
       </section>
 
+      {/* How It Works Section */}
+      <section id="how-it-works" className="container mx-auto px-4 py-8">
+        <h2 className="mb-12 text-center text-3xl font-bold">Comment ça marche</h2>
+        <div className="grid gap-6 md:grid-cols-3">
+          <Card>
+            <CardHeader>
+              <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-green-100 dark:bg-green-900">
+                <span className="font-bold text-green-700 dark:text-green-200">1</span>
+              </div>
+              <CardTitle>Créer ou rejoindre</CardTitle>
+              <CardDescription>
+                Démarrez un nouveau groupe ou rejoignez celui d'un ami
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                Créez facilement un groupe avec vos amis et votre famille. Invitez-les avec un simple lien ou un code d'accès.
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-green-100 dark:bg-green-900">
+                <span className="font-bold text-green-700 dark:text-green-200">2</span>
+              </div>
+              <CardTitle>Ajouter les abonnements</CardTitle>
+              <CardDescription>
+                Partagez la liste de vos abonnements
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                Ajoutez vos abonnements Netflix, Spotify, Adobe Cloud, etc. Dividy calcule automatiquement qui paie quoi.
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-green-100 dark:bg-green-900">
+                <span className="font-bold text-green-700 dark:text-green-200">3</span>
+              </div>
+              <CardTitle>Économiser</CardTitle>
+              <CardDescription>
+                Suivez vos économies mensuelles
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                Recevez des rappels de paiement automatiques et suivez vos économies en temps réel.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      <div className="container mx-auto px-4">
+        <Separator className="my-8" />
+      </div>
+
+      {/* Savings Examples Section */}
+      <section id="savings" className="container mx-auto px-4 py-8">
+        <h2 className="mb-12 text-center text-3xl font-bold">Exemples d'économies</h2>
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Netflix Premium</CardTitle>
+              <CardDescription>Plan 4 écrans</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                  <span className="font-semibold text-zinc-900 dark:text-zinc-100">Prix normal: 22,99€/mois</span>
+                </p>
+                <p className="text-2xl font-bold text-green-600">
+                  5,75€
+                </p>
+                <p className="text-xs text-zinc-600 dark:text-zinc-400">
+                  par personne (groupe de 4)
+                </p>
+                <p className="text-sm font-semibold text-green-600">
+                  Économie: 17,24€/mois
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Spotify Family</CardTitle>
+              <CardDescription>6 comptes</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                  <span className="font-semibold text-zinc-900 dark:text-zinc-100">Prix normal: 17,99€/mois</span>
+                </p>
+                <p className="text-2xl font-bold text-green-600">
+                  3,00€
+                </p>
+                <p className="text-xs text-zinc-600 dark:text-zinc-400">
+                  par personne (groupe de 6)
+                </p>
+                <p className="text-sm font-semibold text-green-600">
+                  Économie: 14,99€/mois
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Adobe Creative Cloud</CardTitle>
+              <CardDescription>Plan individuel</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                  <span className="font-semibold text-zinc-900 dark:text-zinc-100">Prix normal: 60,49€/mois</span>
+                </p>
+                <p className="text-2xl font-bold text-green-600">
+                  15,12€
+                </p>
+                <p className="text-xs text-zinc-600 dark:text-zinc-400">
+                  par personne (groupe de 4)
+                </p>
+                <p className="text-sm font-semibold text-green-600">
+                  Économie: 45,37€/mois
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Disney+</CardTitle>
+              <CardDescription>Plan Premium</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                  <span className="font-semibold text-zinc-900 dark:text-zinc-100">Prix normal: 13,99€/mois</span>
+                </p>
+                <p className="text-2xl font-bold text-green-600">
+                  4,66€
+                </p>
+                <p className="text-xs text-zinc-600 dark:text-zinc-400">
+                  par personne (groupe de 3)
+                </p>
+                <p className="text-sm font-semibold text-green-600">
+                  Économie: 9,33€/mois
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+        <div className="mt-8 text-center">
+          <p className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+            Économies potentielles: <span className="text-3xl text-green-600">87€+/mois</span>
+          </p>
+        </div>
+      </section>
+
+      <div className="container mx-auto px-4">
+        <Separator className="my-8" />
+      </div>
+
       {/* Features Section */}
-      <section id="features" className="container mx-auto px-4 py-16">
-        <h2 className="mb-12 text-center text-3xl font-bold">Key Features</h2>
+      <section id="features" className="container mx-auto px-4 py-8">
+        <h2 className="mb-12 text-center text-3xl font-bold">Avantages de Dividy</h2>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           <Card>
             <CardHeader>
-              <CardTitle>Fast & Reliable</CardTitle>
+              <CardTitle>💳 Paiements sécurisés</CardTitle>
               <CardDescription>
-                Lightning-fast performance with 99.9% uptime
+                Protection de vos données
               </CardDescription>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                Our infrastructure is built to handle millions of requests with
-                minimal latency and maximum reliability.
+                Tous les paiements sont sécurisés avec chiffrement de niveau bancaire. Vos données financières ne sont jamais stockées sur nos serveurs.
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
-              <CardTitle>Easy to Use</CardTitle>
+              <CardTitle>✨ Simple et intuitif</CardTitle>
               <CardDescription>
-                Intuitive interface designed for everyone
+                Facile pour tout le monde
               </CardDescription>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                Get up and running in minutes with our simple setup process and
-                comprehensive documentation.
+                Interface claire et épurée. En quelques clics, créez un groupe et commencez à économiser sans complications.
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
-              <CardTitle>Secure by Default</CardTitle>
-              <CardDescription>
-                Enterprise-grade security built-in
-              </CardDescription>
+              <CardTitle>🔐 Gestion équitable</CardTitle>
+              <CardDescription>Transparence totale</CardDescription>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                Your data is protected with industry-standard encryption and
-                regular security audits.
+                Dividy calcule automatiquement qui doit payer quoi. Pas de disputes, tous les calculs sont transparents.
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
-              <CardTitle>Scalable</CardTitle>
-              <CardDescription>Grows with your business needs</CardDescription>
+              <CardTitle>⏰ Rappels automatiques</CardTitle>
+              <CardDescription>Ne manquez jamais un paiement</CardDescription>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                From startups to enterprises, our platform scales seamlessly to
-                match your growth trajectory.
+                Recevez des notifications avant chaque échéance de paiement. Jamais d'oubli avec Dividy.
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
-              <CardTitle>24/7 Support</CardTitle>
-              <CardDescription>We're here whenever you need us</CardDescription>
+              <CardTitle>📊 Suivi en temps réel</CardTitle>
+              <CardDescription>Voyez vos économies</CardDescription>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                Our dedicated support team is available around the clock to help
-                you succeed.
+                Dashboard complet pour suivre vos dépenses et économies. Graphiques détaillés pour chaque abonnement.
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
-              <CardTitle>Analytics</CardTitle>
-              <CardDescription>Insights that drive decisions</CardDescription>
+              <CardTitle>💬 Support 24/7</CardTitle>
+              <CardDescription>Nous sommes là pour vous</CardDescription>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                Powerful analytics and reporting tools to help you understand
-                and optimize your performance.
+                Équipe disponible 24h/24 pour vous aider. Questions ou problèmes? Nous répondons rapidement.
               </p>
             </CardContent>
           </Card>
@@ -146,17 +308,16 @@ export default function Home() {
 
       {/* CTA Section */}
       <section className="container mx-auto px-4 py-16">
-        <Card className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+        <Card className="bg-gradient-to-r from-green-600 to-emerald-600 text-white">
           <CardHeader className="text-center">
-            <CardTitle className="text-3xl">Ready to Get Started?</CardTitle>
-            <CardDescription className="text-zinc-100">
-              Join thousands of users who are already transforming their
-              workflow
+            <CardTitle className="text-3xl">Prêt à commencer ?</CardTitle>
+            <CardDescription className="text-emerald-50">
+              Rejoignez les milliers d'utilisateurs qui économisent des centaines d'euros chaque année
             </CardDescription>
           </CardHeader>
           <CardContent className="flex justify-center">
-            <Button size="lg" variant="secondary" className="text-base">
-              Start Free Trial
+            <Button size="lg" className="text-base bg-white text-green-600 hover:bg-emerald-50">
+              Créer mon compte gratuitement
             </Button>
           </CardContent>
         </Card>
@@ -167,31 +328,31 @@ export default function Home() {
         <div className="container mx-auto px-4 py-8">
           <div className="grid gap-8 md:grid-cols-4">
             <div>
-              <h3 className="mb-4 font-semibold">Product</h3>
+              <h3 className="mb-4 font-semibold">Produit</h3>
               <ul className="space-y-2 text-sm text-zinc-600 dark:text-zinc-400">
                 <li>
-                  <a href="#" className="hover:underline">
-                    Features
+                  <a href="#features" className="hover:underline">
+                    Avantages
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:underline">
-                    Pricing
+                  <a href="#how-it-works" className="hover:underline">
+                    Comment ça marche
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:underline">
-                    Security
+                  <a href="#savings" className="hover:underline">
+                    Économies
                   </a>
                 </li>
               </ul>
             </div>
             <div>
-              <h3 className="mb-4 font-semibold">Company</h3>
+              <h3 className="mb-4 font-semibold">Entreprise</h3>
               <ul className="space-y-2 text-sm text-zinc-600 dark:text-zinc-400">
                 <li>
                   <a href="#" className="hover:underline">
-                    About
+                    À propos
                   </a>
                 </li>
                 <li>
@@ -201,13 +362,13 @@ export default function Home() {
                 </li>
                 <li>
                   <a href="#" className="hover:underline">
-                    Careers
+                    Carrières
                   </a>
                 </li>
               </ul>
             </div>
             <div>
-              <h3 className="mb-4 font-semibold">Resources</h3>
+              <h3 className="mb-4 font-semibold">Support</h3>
               <ul className="space-y-2 text-sm text-zinc-600 dark:text-zinc-400">
                 <li>
                   <a href="#" className="hover:underline">
@@ -216,39 +377,39 @@ export default function Home() {
                 </li>
                 <li>
                   <a href="#" className="hover:underline">
-                    Help Center
+                    Centre d'aide
                   </a>
                 </li>
                 <li>
                   <a href="#" className="hover:underline">
-                    Community
+                    Contact
                   </a>
                 </li>
               </ul>
             </div>
             <div>
-              <h3 className="mb-4 font-semibold">Legal</h3>
+              <h3 className="mb-4 font-semibold">Légal</h3>
               <ul className="space-y-2 text-sm text-zinc-600 dark:text-zinc-400">
                 <li>
                   <a href="#" className="hover:underline">
-                    Privacy
+                    Confidentialité
                   </a>
                 </li>
                 <li>
                   <a href="#" className="hover:underline">
-                    Terms
+                    Conditions d'utilisation
                   </a>
                 </li>
                 <li>
                   <a href="#" className="hover:underline">
-                    Cookie Policy
+                    Politique de cookies
                   </a>
                 </li>
               </ul>
             </div>
           </div>
           <div className="mt-8 border-t pt-8 text-center text-sm text-zinc-600 dark:text-zinc-400">
-            © 2024 YourBrand. All rights reserved.
+            © 2024 Dividy. Tous droits réservés.
           </div>
         </div>
       </footer>
