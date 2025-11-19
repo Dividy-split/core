@@ -1,4 +1,6 @@
-import * as SimpleIcons from '@icons-pack/react-simple-icons';
+// components/ui/PlatformLogo.tsx
+import { IconType } from 'react-icons';
+import * as SimpleIcons from 'react-icons/si';
 
 interface PlatformLogoProps {
   iconName: string;
@@ -9,15 +11,15 @@ interface PlatformLogoProps {
 
 export default function PlatformLogo({ 
   iconName, 
-  color = 'default', 
+  color = '#000000', 
   size = 48,
   className = '' 
 }: PlatformLogoProps) {
-  // Récupérer le composant d'icône dynamiquement
-  const IconComponent = (SimpleIcons as any)[iconName];
+  // Récupérer le composant d'icône dynamiquement depuis react-icons/si
+  const IconComponent = (SimpleIcons as any)[iconName] as IconType;
 
   if (!IconComponent) {
-    console.warn(`Icon ${iconName} not found`);
+    console.warn(`Icon ${iconName} not found in react-icons/si`);
     return (
       <div 
         className={`flex items-center justify-center ${className}`}
