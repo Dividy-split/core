@@ -16,7 +16,7 @@ export default function Home() {
       <header className="border-b bg-white/50 backdrop-blur-sm dark:bg-zinc-950/50">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <div className="text-xl font-bold">Dividy</div>
-          <nav className="flex gap-6">
+          <nav className="flex items-center gap-6">
             <a href="#how-it-works" className="text-sm font-medium hover:underline">
               Comment ça marche
             </a>
@@ -25,6 +25,11 @@ export default function Home() {
             </a>
             <a href="#features" className="text-sm font-medium hover:underline">
               Avantages
+            </a>
+            <a href="/sign-in">
+              <Button variant="outline" size="sm">
+                Se connecter
+              </Button>
             </a>
           </nav>
         </div>
@@ -47,12 +52,16 @@ export default function Home() {
           Partagez les coûts de vos abonnements préférés avec vos amis et votre famille. Dividy gère les paiements équitablement et vous aide à économiser des centaines d'euros chaque année.
         </p>
         <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
-          <Button size="lg" className="text-base bg-green-600 hover:bg-green-700">
-            Commencer gratuitement
-          </Button>
-          <Button size="lg" variant="outline" className="text-base">
-            En savoir plus
-          </Button>
+          <a href="/sign-up">
+            <Button size="lg" className="text-base bg-green-600 hover:bg-green-700">
+              Commencer gratuitement
+            </Button>
+          </a>
+          <a href="/sign-in">
+            <Button size="lg" variant="outline" className="text-base">
+              Se connecter
+            </Button>
+          </a>
         </div>
       </section>
 
@@ -316,9 +325,11 @@ export default function Home() {
             </CardDescription>
           </CardHeader>
           <CardContent className="flex justify-center">
-            <Button size="lg" className="text-base bg-white text-green-600 hover:bg-emerald-50">
-              Créer mon compte gratuitement
-            </Button>
+            <a href="/sign-up">
+              <Button size="lg" className="text-base bg-white text-green-600 hover:bg-emerald-50">
+                Créer mon compte gratuitement
+              </Button>
+            </a>
           </CardContent>
         </Card>
       </section>

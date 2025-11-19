@@ -11,11 +11,13 @@ import {
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { CheckCircle2 } from "lucide-react"
+import { CheckCircle2, LogOut } from "lucide-react"
+import { signOut } from "@/lib/auth-client"
 
 export default function OnboardingPage() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
+  const [isSigningOut, setIsSigningOut] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const handleComplete = async () => {
@@ -39,6 +41,18 @@ export default function OnboardingPage() {
       console.error("Onboarding error:", err)
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  const handleSignOut = async () => {
+    setIsSigningOut(true)
+    try {
+      await signOut()
+      router.push("/")
+    } catch (err) {
+      setError("Erreur lors de la déconnexion. Veuillez réessayer.")
+      console.error("Sign out error:", err)
+      setIsSigningOut(false)
     }
   }
 
@@ -100,10 +114,21 @@ export default function OnboardingPage() {
           <Button
             className="w-full"
             onClick={handleComplete}
-            disabled={isLoading}
+            disabled={isLoading || isSigningOut}
             size="lg"
           >
             {isLoading ? "Chargement..." : "Accéder à mon tableau de bord"}
+          </Button>
+
+          <Button
+            className="w-full"
+            variant="outline"
+            onClick={handleSignOut}
+            disabled={isSigningOut || isLoading}
+            size="sm"
+          >
+            <LogOut className="mr-2 h-4 w-4" />
+            {isSigningOut ? "Déconnexion..." : "Se déconnecter"}
           </Button>
         </CardContent>
       </Card>
