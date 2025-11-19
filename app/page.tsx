@@ -8,21 +8,37 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { HomeSidebar } from "@/components/ui/home-sidebar";
-import { ScrollToTopButton } from "@/components/ui/scroll-to-top-button";
+import Link from "next/link";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-zinc-50 to-zinc-100 dark:from-zinc-950 dark:to-zinc-900">
-
-      {/* Navigation latérale */}
-      <HomeSidebar />
-
-      {/* Bouton pour remonter en haut */}
-      <ScrollToTopButton />
+      {/* Header */}
+      <header className="border-b bg-white/50 backdrop-blur-sm dark:bg-zinc-950/50">
+        <div className="container mx-auto flex h-16 items-center justify-between px-4">
+          <div className="text-xl font-bold">Dividy</div>
+          <nav className="flex gap-6">
+            <a href="#how-it-works" className="text-sm font-medium hover:underline">
+              Comment ça marche
+            </a>
+            <a href="#savings" className="text-sm font-medium hover:underline">
+              Économies
+            </a>
+            <a href="#features" className="text-sm font-medium hover:underline">
+              Avantages
+            </a>
+            <Link href="/platforms" className="text-sm font-medium hover:underline">
+              Plateforme
+            </Link>
+          </nav>
+        </div>
+      </header>
 
       {/* Hero Section */}
-      <section id="hero" className="container mx-auto px-4 py-12 max-w-5xl text-center">
+      <section className="container mx-auto px-4 py-12 text-center">
+        <Badge className="mb-4 bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+          Économisez jusqu'à 70%
+        </Badge>
         <h1 className="mb-6 text-5xl font-bold tracking-tight md:text-6xl">
           Divisez vos abonnements,
           <span className="bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
@@ -36,9 +52,11 @@ export default function Home() {
         </p>
         
         <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
-          <Button size="lg" className="text-base bg-green-600 hover:bg-green-700">
-            Commencer gratuitement
-          </Button>
+          <Link href="/platform">
+            <Button size="lg" className="text-base bg-green-600 hover:bg-green-700">
+              Commencer gratuitement
+            </Button>
+          </Link>
           <Button size="lg" variant="outline" className="text-base">
             En savoir plus
           </Button>
@@ -296,22 +314,22 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="container mx-auto px-4 py-12 max-w-5xl">
-        <div className="mx-auto max-w-3xl">
-          <Card className="bg-gradient-to-r from-green-600 to-emerald-600 text-white">
-            <CardHeader className="text-center">
-              <CardTitle className="text-2xl md:text-3xl">Prêt à commencer ?</CardTitle>
-              <CardDescription className="text-emerald-50">
-                Rejoignez les milliers d'utilisateurs qui économisent des centaines d'euros chaque année
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="flex justify-center">
+      <section className="container mx-auto px-4 py-16">
+        <Card className="bg-gradient-to-r from-green-600 to-emerald-600 text-white">
+          <CardHeader className="text-center">
+            <CardTitle className="text-3xl">Prêt à commencer ?</CardTitle>
+            <CardDescription className="text-emerald-50">
+              Rejoignez les milliers d'utilisateurs qui économisent des centaines d'euros chaque année
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex justify-center">
+            <Link href="/platform">
               <Button size="lg" className="text-base bg-white text-green-600 hover:bg-emerald-50">
                 Créer mon compte gratuitement
               </Button>
-            </CardContent>
-          </Card>
-        </div>
+            </Link>
+          </CardContent>
+        </Card>
       </section>
 
       {/* Footer */}
