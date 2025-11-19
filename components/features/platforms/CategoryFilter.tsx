@@ -1,3 +1,4 @@
+// components/features/platforms/CategoryFilter.tsx
 import { Category } from '@/types/platform';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -23,7 +24,11 @@ export default function CategoryFilter({
           variant={selectedCategory === 'all' ? 'default' : 'outline'}
           size="lg"
           onClick={() => onSelectCategory('all')}
-          className="transition-all duration-200 hover:scale-105"
+          className={`transition-all duration-200 hover:scale-105 ${
+            selectedCategory === 'all'
+              ? 'bg-blue-600 hover:bg-blue-600'
+              : ''
+          }`}
         >
           Toutes
           <Badge 
@@ -41,7 +46,11 @@ export default function CategoryFilter({
             variant={selectedCategory === category.id ? 'default' : 'outline'}
             size="lg"
             onClick={() => onSelectCategory(category.id)}
-            className="transition-all duration-200 hover:scale-105"
+            className={`transition-all duration-200 hover:scale-105 ${
+              selectedCategory === category.id
+                ? 'bg-blue-600 hover:bg-blue-600'
+                : ''
+            }`}
           >
             <span className="mr-2 text-xl">{category.icon}</span>
             {category.name}
