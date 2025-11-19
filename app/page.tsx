@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 export default function Home() {
   return (
@@ -30,7 +31,8 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <section className="container mx-auto px-4 py-24 text-center">
+      <section className="container mx-auto px-4 py-12
+       text-center">
         <Badge className="mb-4 bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
           Économisez jusqu'à 70%
         </Badge>
@@ -55,7 +57,7 @@ export default function Home() {
       </section>
 
       {/* How It Works Section */}
-      <section id="how-it-works" className="container mx-auto px-4 py-16">
+      <section id="how-it-works" className="container mx-auto px-4 py-8">
         <h2 className="mb-12 text-center text-3xl font-bold">Comment ça marche</h2>
         <div className="grid gap-6 md:grid-cols-3">
           <Card>
@@ -111,8 +113,12 @@ export default function Home() {
         </div>
       </section>
 
+      <div className="container mx-auto px-4">
+        <Separator className="my-8" />
+      </div>
+
       {/* Savings Examples Section */}
-      <section id="savings" className="container mx-auto px-4 py-16">
+      <section id="savings" className="container mx-auto px-4 py-8">
         <h2 className="mb-12 text-center text-3xl font-bold">Exemples d'économies</h2>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           <Card>
@@ -214,8 +220,12 @@ export default function Home() {
         </div>
       </section>
 
+      <div className="container mx-auto px-4">
+        <Separator className="my-8" />
+      </div>
+
       {/* Features Section */}
-      <section id="features" className="container mx-auto px-4 py-16">
+      <section id="features" className="container mx-auto px-4 py-8">
         <h2 className="mb-12 text-center text-3xl font-bold">Avantages de Dividy</h2>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           <Card>
