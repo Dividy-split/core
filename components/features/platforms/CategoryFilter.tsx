@@ -18,45 +18,35 @@ export default function CategoryFilter({
 
   return (
     <div className="mb-8">
-      <div className="flex flex-wrap items-center justify-center gap-3">
-        {/* Bouton "Toutes" */}
+      <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3">
         <Button
           variant={selectedCategory === 'all' ? 'default' : 'outline'}
-          size="lg"
+          size="sm"
           onClick={() => onSelectCategory('all')}
-          className={`transition-all duration-200 hover:scale-105 ${
-            selectedCategory === 'all'
-              ? 'bg-blue-600 hover:bg-blue-600'
-              : ''
-          }`}
+          className="rounded-full"
         >
           Toutes
           <Badge 
             variant="secondary" 
-            className="ml-2 bg-background/20 text-foreground"
+            className="ml-2"
           >
             {totalCount}
           </Badge>
         </Button>
 
-        {/* Boutons de catégories */}
         {categories.map((category) => (
           <Button
             key={category.id}
             variant={selectedCategory === category.id ? 'default' : 'outline'}
-            size="lg"
+            size="sm"
             onClick={() => onSelectCategory(category.id)}
-            className={`transition-all duration-200 hover:scale-105 ${
-              selectedCategory === category.id
-                ? 'bg-blue-600 hover:bg-blue-600'
-                : ''
-            }`}
+            className="rounded-full"
           >
-            <span className="mr-2 text-xl">{category.icon}</span>
+            <span className="mr-2 text-base">{category.icon}</span>
             {category.name}
             <Badge 
               variant="secondary" 
-              className="ml-2 bg-background/20 text-foreground"
+              className="ml-2"
             >
               {category.count}
             </Badge>

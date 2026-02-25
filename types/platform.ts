@@ -15,3 +15,14 @@ export interface Category {
   icon: string;
   count: number;
 }
+
+export interface PlatformOffer {
+  id: string;
+  platformId: string;
+  sellerName: string;
+  planLabel: string;
+  pricePerMonth: number;
+  invoiceVerified: boolean;
+  instantAcceptance: boolean;
+  trustScore?: number;
+}

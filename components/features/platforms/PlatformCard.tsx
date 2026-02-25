@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import PlatformLogo from '@/components/ui/platformLogo';
+import Link from 'next/link';
 
 interface PlatformCardProps {
   platform: Platform;
@@ -16,54 +17,61 @@ interface PlatformCardProps {
 
 export default function PlatformCard({ platform }: PlatformCardProps) {
   return (
-    <Card className="group overflow-hidden transition-all duration-300 hover:shadow-xl">
-      {/* Logo Container */}
-      <CardHeader className="relative pb-4">
-        <div className="mb-4 flex h-32 items-center justify-center rounded-lg bg-gradient-to-br from-gray-50 to-gray-100 p-6">
-          <div className="transition-transform duration-300 group-hover:scale-110">
-            <PlatformLogo 
-              iconName={platform.logo} 
-              color={platform.logoColor || 'default'}
-              size={64}
-            />
+    <Link
+      href={`/platforms/${platform.id}`}
+      className="block h-full"
+      aria-label={`Voir les offres pour ${platform.name}`}
+    >
+      <Card className="group h-full overflow-hidden rounded-2xl border bg-card/90 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl">
+        {/* Logo Container */}
+        <CardHeader className="relative pb-4">
+          <div className="mb-4 flex h-32 items-center justify-center rounded-xl border bg-gradient-to-br from-background to-muted/30 p-6">
+            <div className="transition-transform duration-300 group-hover:scale-110">
+              <PlatformLogo 
+                iconName={platform.logo} 
+                color={platform.logoColor || 'currentColor'}
+                size={64}
+                fallbackLabel={platform.name}
+              />
+            </div>
           </div>
-        </div>
-        
-        {platform.isNew && (
-          <Badge 
-            variant="default" 
-            className="absolute right-6 top-6 bg-green-500 hover:bg-green-600"
-          >
-            Nouveau
-          </Badge>
-        )}
 
-        <CardTitle className="text-xl">{platform.name}</CardTitle>
-        <CardDescription className="line-clamp-2">
-          {platform.description}
-        </CardDescription>
-      </CardHeader>
+          {platform.isNew && (
+            <Badge 
+              variant="default" 
+              className="absolute right-6 top-6 bg-green-500 hover:bg-green-600"
+            >
+              Nouveau
+            </Badge>
+          )}
 
-      <CardContent className="pb-4">
-        {/* Active Groups Counter */}
-        <div className="flex items-center space-x-2">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100">
-            <span className="text-sm font-semibold text-blue-600">
-              {platform.activeGroups}
+          <CardTitle className="text-xl tracking-tight">{platform.name}</CardTitle>
+          <CardDescription className="line-clamp-2">
+            {platform.description}
+          </CardDescription>
+        </CardHeader>
+
+        <CardContent className="pb-4">
+          {/* Active Groups Counter */}
+          <div className="flex items-center space-x-2">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100">
+              <span className="text-sm font-semibold text-blue-600">
+                {platform.activeGroups}
+              </span>
+            </div>
+            <span className="text-sm text-muted-foreground">
+              groupe{platform.activeGroups > 1 ? 's' : ''} actif{platform.activeGroups > 1 ? 's' : ''}
             </span>
           </div>
-          <span className="text-sm text-muted-foreground">
-            groupe{platform.activeGroups > 1 ? 's' : ''} actif{platform.activeGroups > 1 ? 's' : ''}
-          </span>
-        </div>
-      </CardContent>
+        </CardContent>
 
-      <CardFooter className="border-t pt-4">
-        <Badge variant="secondary" className={getCategoryVariant(platform.category)}>
-          {getCategoryLabel(platform.category)}
-        </Badge>
-      </CardFooter>
-    </Card>
+        <CardFooter className="border-t pt-4">
+          <Badge variant="secondary" className={getCategoryVariant(platform.category)}>
+            {getCategoryLabel(platform.category)}
+          </Badge>
+        </CardFooter>
+      </Card>
+    </Link>
   );
 }
 
