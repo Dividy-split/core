@@ -1,4 +1,3 @@
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -7,15 +6,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { HomeSidebar } from "@/components/ui/home-sidebar";
 import { ScrollToTopButton } from "@/components/ui/scroll-to-top-button";
+import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-zinc-50 to-zinc-100 dark:from-zinc-950 dark:to-zinc-900">
-
       {/* Navigation latérale */}
       <HomeSidebar />
 
@@ -23,7 +21,10 @@ export default function Home() {
       <ScrollToTopButton />
 
       {/* Hero Section */}
-      <section id="hero" className="container mx-auto px-4 py-12 max-w-5xl text-center">
+      <section
+        id="hero"
+        className="container mx-auto px-4 py-12 max-w-5xl text-center"
+      >
         <h1 className="mb-6 text-5xl font-bold tracking-tight md:text-6xl">
           Divisez vos abonnements,
           <span className="bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
@@ -31,14 +32,19 @@ export default function Home() {
             pas vos économies
           </span>
         </h1>
-        
+
         <p className="mx-auto mb-8 max-w-2xl text-lg text-zinc-600 dark:text-zinc-400">
-          Partagez les coûts de vos abonnements préférés avec vos amis et votre famille. Dividy gère les paiements équitablement et vous aide à économiser des centaines d'euros chaque année.
+          Partagez les coûts de vos abonnements préférés avec vos amis et votre
+          famille. Dividy gère les paiements équitablement et vous aide à
+          économiser des centaines d'euros chaque année.
         </p>
-        
+
         <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
           <Link href="/platforms">
-            <Button size="lg" className="text-base bg-green-600 hover:bg-green-700">
+            <Button
+              size="lg"
+              className="text-base bg-green-600 hover:bg-green-700"
+            >
               Plateformes
             </Button>
           </Link>
@@ -51,13 +57,20 @@ export default function Home() {
       </section>
 
       {/* How It Works Section */}
-      <section id="how-it-works" className="container mx-auto px-4 py-8 max-w-5xl">
-        <h2 className="mb-12 text-center text-3xl font-bold">Comment ça marche</h2>
+      <section
+        id="how-it-works"
+        className="container mx-auto px-4 py-8 max-w-5xl"
+      >
+        <h2 className="mb-12 text-center text-3xl font-bold">
+          Comment ça marche
+        </h2>
         <div className="grid gap-6 md:grid-cols-3">
           <Card>
             <CardHeader>
               <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-green-100 dark:bg-green-900">
-                <span className="font-bold text-green-700 dark:text-green-200">1</span>
+                <span className="font-bold text-green-700 dark:text-green-200">
+                  1
+                </span>
               </div>
               <CardTitle>Créer ou rejoindre</CardTitle>
               <CardDescription>
@@ -66,7 +79,8 @@ export default function Home() {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                Créez facilement un groupe avec vos amis et votre famille. Invitez-les avec un simple lien ou un code d'accès.
+                Créez facilement un groupe avec vos amis et votre famille.
+                Invitez-les avec un simple lien ou un code d'accès.
               </p>
             </CardContent>
           </Card>
@@ -74,7 +88,9 @@ export default function Home() {
           <Card>
             <CardHeader>
               <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-green-100 dark:bg-green-900">
-                <span className="font-bold text-green-700 dark:text-green-200">2</span>
+                <span className="font-bold text-green-700 dark:text-green-200">
+                  2
+                </span>
               </div>
               <CardTitle>Ajouter les abonnements</CardTitle>
               <CardDescription>
@@ -83,7 +99,8 @@ export default function Home() {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                Ajoutez vos abonnements Netflix, Spotify, Adobe Cloud, etc. Dividy calcule automatiquement qui paie quoi.
+                Ajoutez vos abonnements Netflix, Spotify, Adobe Cloud, etc.
+                Dividy calcule automatiquement qui paie quoi.
               </p>
             </CardContent>
           </Card>
@@ -91,16 +108,17 @@ export default function Home() {
           <Card>
             <CardHeader>
               <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-green-100 dark:bg-green-900">
-                <span className="font-bold text-green-700 dark:text-green-200">3</span>
+                <span className="font-bold text-green-700 dark:text-green-200">
+                  3
+                </span>
               </div>
               <CardTitle>Économiser</CardTitle>
-              <CardDescription>
-                Suivez vos économies mensuelles
-              </CardDescription>
+              <CardDescription>Suivez vos économies mensuelles</CardDescription>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                Recevez des rappels de paiement automatiques et suivez vos économies en temps réel.
+                Recevez des rappels de paiement automatiques et suivez vos
+                économies en temps réel.
               </p>
             </CardContent>
           </Card>
@@ -113,7 +131,9 @@ export default function Home() {
 
       {/* Savings Examples Section */}
       <section id="savings" className="container mx-auto px-4 py-8 max-w-5xl">
-        <h2 className="mb-12 text-center text-3xl font-bold">Exemples d'économies</h2>
+        <h2 className="mb-12 text-center text-3xl font-bold">
+          Exemples d'économies
+        </h2>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           <Card>
             <CardHeader>
@@ -123,11 +143,11 @@ export default function Home() {
             <CardContent>
               <div className="space-y-2">
                 <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                  <span className="font-semibold text-zinc-900 dark:text-zinc-100">Prix normal: 22,99€/mois</span>
+                  <span className="font-semibold text-zinc-900 dark:text-zinc-100">
+                    Prix normal: 22,99€/mois
+                  </span>
                 </p>
-                <p className="text-2xl font-bold text-green-600">
-                  5,75€
-                </p>
+                <p className="text-2xl font-bold text-green-600">5,75€</p>
                 <p className="text-xs text-zinc-600 dark:text-zinc-400">
                   par personne (groupe de 4)
                 </p>
@@ -146,11 +166,11 @@ export default function Home() {
             <CardContent>
               <div className="space-y-2">
                 <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                  <span className="font-semibold text-zinc-900 dark:text-zinc-100">Prix normal: 17,99€/mois</span>
+                  <span className="font-semibold text-zinc-900 dark:text-zinc-100">
+                    Prix normal: 17,99€/mois
+                  </span>
                 </p>
-                <p className="text-2xl font-bold text-green-600">
-                  3,00€
-                </p>
+                <p className="text-2xl font-bold text-green-600">3,00€</p>
                 <p className="text-xs text-zinc-600 dark:text-zinc-400">
                   par personne (groupe de 6)
                 </p>
@@ -169,11 +189,11 @@ export default function Home() {
             <CardContent>
               <div className="space-y-2">
                 <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                  <span className="font-semibold text-zinc-900 dark:text-zinc-100">Prix normal: 60,49€/mois</span>
+                  <span className="font-semibold text-zinc-900 dark:text-zinc-100">
+                    Prix normal: 60,49€/mois
+                  </span>
                 </p>
-                <p className="text-2xl font-bold text-green-600">
-                  15,12€
-                </p>
+                <p className="text-2xl font-bold text-green-600">15,12€</p>
                 <p className="text-xs text-zinc-600 dark:text-zinc-400">
                   par personne (groupe de 4)
                 </p>
@@ -192,11 +212,11 @@ export default function Home() {
             <CardContent>
               <div className="space-y-2">
                 <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                  <span className="font-semibold text-zinc-900 dark:text-zinc-100">Prix normal: 13,99€/mois</span>
+                  <span className="font-semibold text-zinc-900 dark:text-zinc-100">
+                    Prix normal: 13,99€/mois
+                  </span>
                 </p>
-                <p className="text-2xl font-bold text-green-600">
-                  4,66€
-                </p>
+                <p className="text-2xl font-bold text-green-600">4,66€</p>
                 <p className="text-xs text-zinc-600 dark:text-zinc-400">
                   par personne (groupe de 3)
                 </p>
@@ -209,7 +229,8 @@ export default function Home() {
         </div>
         <div className="mt-8 text-center">
           <p className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-            Économies potentielles: <span className="text-3xl text-green-600">87€+/mois</span>
+            Économies potentielles:{" "}
+            <span className="text-3xl text-green-600">87€+/mois</span>
           </p>
         </div>
       </section>
@@ -220,18 +241,20 @@ export default function Home() {
 
       {/* Features Section */}
       <section id="features" className="container mx-auto px-4 py-8 max-w-5xl">
-        <h2 className="mb-12 text-center text-3xl font-bold">Avantages de Dividy</h2>
+        <h2 className="mb-12 text-center text-3xl font-bold">
+          Avantages de Dividy
+        </h2>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           <Card>
             <CardHeader>
               <CardTitle>💳 Paiements sécurisés</CardTitle>
-              <CardDescription>
-                Protection de vos données
-              </CardDescription>
+              <CardDescription>Protection de vos données</CardDescription>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                Tous les paiements sont sécurisés avec chiffrement de niveau bancaire. Vos données financières ne sont jamais stockées sur nos serveurs.
+                Tous les paiements sont sécurisés avec chiffrement de niveau
+                bancaire. Vos données financières ne sont jamais stockées sur
+                nos serveurs.
               </p>
             </CardContent>
           </Card>
@@ -239,13 +262,12 @@ export default function Home() {
           <Card>
             <CardHeader>
               <CardTitle>✨ Simple et intuitif</CardTitle>
-              <CardDescription>
-                Facile pour tout le monde
-              </CardDescription>
+              <CardDescription>Facile pour tout le monde</CardDescription>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                Interface claire et épurée. En quelques clics, créez un groupe et commencez à économiser sans complications.
+                Interface claire et épurée. En quelques clics, créez un groupe
+                et commencez à économiser sans complications.
               </p>
             </CardContent>
           </Card>
@@ -257,7 +279,8 @@ export default function Home() {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                Dividy calcule automatiquement qui doit payer quoi. Pas de disputes, tous les calculs sont transparents.
+                Dividy calcule automatiquement qui doit payer quoi. Pas de
+                disputes, tous les calculs sont transparents.
               </p>
             </CardContent>
           </Card>
@@ -269,7 +292,8 @@ export default function Home() {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                Recevez des notifications avant chaque échéance de paiement. Jamais d'oubli avec Dividy.
+                Recevez des notifications avant chaque échéance de paiement.
+                Jamais d'oubli avec Dividy.
               </p>
             </CardContent>
           </Card>
@@ -281,7 +305,8 @@ export default function Home() {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                Dashboard complet pour suivre vos dépenses et économies. Graphiques détaillés pour chaque abonnement.
+                Dashboard complet pour suivre vos dépenses et économies.
+                Graphiques détaillés pour chaque abonnement.
               </p>
             </CardContent>
           </Card>
@@ -293,7 +318,8 @@ export default function Home() {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                Équipe disponible 24h/24 pour vous aider. Questions ou problèmes? Nous répondons rapidement.
+                Équipe disponible 24h/24 pour vous aider. Questions ou
+                problèmes? Nous répondons rapidement.
               </p>
             </CardContent>
           </Card>
@@ -305,17 +331,23 @@ export default function Home() {
         <div className="mx-auto max-w-3xl">
           <Card className="bg-gradient-to-r from-green-600 to-emerald-600 text-white">
             <CardHeader className="text-center">
-              <CardTitle className="text-2xl md:text-3xl">Prêt à commencer ?</CardTitle>
+              <CardTitle className="text-2xl md:text-3xl">
+                Prêt à commencer ?
+              </CardTitle>
               <CardDescription className="text-emerald-50">
-                Rejoignez les milliers d'utilisateurs qui économisent des centaines d'euros chaque année
+                Rejoignez les milliers d'utilisateurs qui économisent des
+                centaines d'euros chaque année
               </CardDescription>
             </CardHeader>
             <CardContent className="flex justify-center">
-              <Link href="/sign-up"
-                <Button size="lg" className="text-base bg-white text-green-600 hover:bg-emerald-50">
+              <Link href={"/sign-up"}>
+                <Button
+                  size="lg"
+                  className="text-base bg-white text-green-600 hover:bg-emerald-50"
+                >
                   Créer mon compte gratuitement
                 </Button>
-              <Link/>
+              </Link>
             </CardContent>
           </Card>
         </div>
