@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -26,13 +27,15 @@ export default function Home() {
             <a href="#features" className="text-sm font-medium hover:underline">
               Avantages
             </a>
+            <Link href="/platforms" className="text-sm font-medium hover:underline">
+              Plateforme
+            </Link>
           </nav>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="container mx-auto px-4 py-12
-       text-center">
+      <section className="container mx-auto px-4 py-12 text-center">
         <Badge className="mb-4 bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
           Économisez jusqu'à 70%
         </Badge>
@@ -43,13 +46,17 @@ export default function Home() {
             pas vos économies
           </span>
         </h1>
+        
         <p className="mx-auto mb-8 max-w-2xl text-lg text-zinc-600 dark:text-zinc-400">
           Partagez les coûts de vos abonnements préférés avec vos amis et votre famille. Dividy gère les paiements équitablement et vous aide à économiser des centaines d'euros chaque année.
         </p>
+        
         <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
-          <Button size="lg" className="text-base bg-green-600 hover:bg-green-700">
-            Commencer gratuitement
-          </Button>
+          <Link href="/platform">
+            <Button size="lg" className="text-base bg-green-600 hover:bg-green-700">
+              Commencer gratuitement
+            </Button>
+          </Link>
           <Button size="lg" variant="outline" className="text-base">
             En savoir plus
           </Button>
@@ -57,7 +64,7 @@ export default function Home() {
       </section>
 
       {/* How It Works Section */}
-      <section id="how-it-works" className="container mx-auto px-4 py-8">
+      <section id="how-it-works" className="container mx-auto px-4 py-8 max-w-5xl">
         <h2 className="mb-12 text-center text-3xl font-bold">Comment ça marche</h2>
         <div className="grid gap-6 md:grid-cols-3">
           <Card>
@@ -118,7 +125,7 @@ export default function Home() {
       </div>
 
       {/* Savings Examples Section */}
-      <section id="savings" className="container mx-auto px-4 py-8">
+      <section id="savings" className="container mx-auto px-4 py-8 max-w-5xl">
         <h2 className="mb-12 text-center text-3xl font-bold">Exemples d'économies</h2>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           <Card>
@@ -225,7 +232,7 @@ export default function Home() {
       </div>
 
       {/* Features Section */}
-      <section id="features" className="container mx-auto px-4 py-8">
+      <section id="features" className="container mx-auto px-4 py-8 max-w-5xl">
         <h2 className="mb-12 text-center text-3xl font-bold">Avantages de Dividy</h2>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           <Card>
@@ -316,9 +323,11 @@ export default function Home() {
             </CardDescription>
           </CardHeader>
           <CardContent className="flex justify-center">
-            <Button size="lg" className="text-base bg-white text-green-600 hover:bg-emerald-50">
-              Créer mon compte gratuitement
-            </Button>
+            <Link href="/platform">
+              <Button size="lg" className="text-base bg-white text-green-600 hover:bg-emerald-50">
+                Créer mon compte gratuitement
+              </Button>
+            </Link>
           </CardContent>
         </Card>
       </section>
