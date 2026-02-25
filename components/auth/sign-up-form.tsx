@@ -65,10 +65,18 @@ export function SignUpForm() {
       })
 
       if (authError) {
-        if (authError.message.includes("email")) {
+        const errorMessage =
+          typeof authError === "string"
+            ? authError
+            : typeof authError.message === "string"
+              ? authError.message
+              : ""
+        const normalizedMessage = errorMessage.toLowerCase()
+
+        if (normalizedMessage.includes("email")) {
           setError("Cet email est déjà utilisé")
         } else {
-          setError(authError.message || "Erreur lors de l'inscription")
+          setError(errorMessage || "Erreur lors de l'inscription")
         }
         return
       }

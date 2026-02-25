@@ -52,12 +52,23 @@ export function SignInForm() {
       })
 
       if (authError) {
-        if (authError.message.includes("not found") || authError.message.includes("password")) {
+        const errorMessage =
+          typeof authError === "string"
+            ? authError
+            : typeof authError.message === "string"
+              ? authError.message
+              : ""
+        const normalizedMessage = errorMessage.toLowerCase()
+
+        if (
+          normalizedMessage.includes("not found") ||
+          normalizedMessage.includes("password")
+        ) {
           setError("Email ou mot de passe incorrect")
-        } else if (authError.message.includes("verify")) {
+        } else if (normalizedMessage.includes("verify")) {
           setError("Veuillez vérifier votre email avant de vous connecter")
         } else {
-          setError(authError.message || "Erreur lors de la connexion")
+          setError(errorMessage || "Erreur lors de la connexion")
         }
         return
       }
