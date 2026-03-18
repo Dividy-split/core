@@ -9,13 +9,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { redirect } from "next/navigation"
+import { useRouter } from "next/navigation"
 
 export default function DashboardPage() {
   const { data: session } = useSession()
+  const router = useRouter()
 
   if (!session) {
-    redirect("/sign-in")
+    router.push("/sign-in")
+    return null
   }
 
   return (
