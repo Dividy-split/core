@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Mail, CheckCircle, AlertCircle } from "lucide-react"
+import { Mail, CheckCircle, AlertCircle, Loader2 } from "lucide-react"
 
 export default function VerifyEmailPage() {
   const searchParams = useSearchParams()

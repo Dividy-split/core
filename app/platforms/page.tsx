@@ -1,26 +1,61 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import PlatformCard from '@/components/features/platforms/PlatformCard';
 import CategoryFilter from '@/components/features/platforms/CategoryFilter';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { mockPlatforms, categories } from '@/data/mockPlatforms';
 import { Grid3X3, SearchIcon, Tag } from 'lucide-react';
+
+interface PlatformData {
+  id: string;
+  slug: string;
+  name: string;
+  logo: string;
+  logoColor: string | null;
+  description: string;
+  category: string;
+  _count: { groups: number };
+}
+
+const categoryList = [
+  { id: 'streaming', name: 'Streaming Vidéo', icon: '🎬' },
+  { id: 'music', name: 'Musique', icon: '🎵' },
+  { id: 'gaming', name: 'Gaming', icon: '🎮' },
+  { id: 'fitness', name: 'Fitness', icon: '💪' },
+  { id: 'cloud', name: 'Cloud & Stockage', icon: '☁️' },
+  { id: 'elearning', name: 'E-Learning', icon: '🎓' },
+];
 
 export default function PlatformsPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [platforms, setPlatforms] = useState<PlatformData[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/platforms')
+      .then((res) => res.json())
+      .then(setPlatforms)
+      .finally(() => setLoading(false));
+  }, []);
 
   const filteredPlatforms = useMemo(() => {
-    return mockPlatforms.filter(platform => {
+    return platforms.filter(platform => {
       const matchesCategory = selectedCategory === 'all' || platform.category === selectedCategory;
       const matchesSearch = platform.name.toLowerCase().includes(searchTerm.toLowerCase());
       return matchesCategory && matchesSearch;
     });
-  }, [selectedCategory, searchTerm]);
+  }, [selectedCategory, searchTerm, platforms]);
+
+  const categories = categoryList.map((cat) => ({
+    ...cat,
+    count: platforms.filter((p) => p.category === cat.id).length,
+  }));
 
   const totalPlatforms = filteredPlatforms.length;
+
+  if (loading) return null;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20 px-4 py-10 sm:px-6 lg:px-8">
@@ -38,7 +73,7 @@ export default function PlatformsPage() {
               <p className="mb-1 text-xs text-muted-foreground">Total plateformes</p>
               <p className="flex items-center gap-2 text-2xl font-semibold">
                 <Grid3X3 className="h-5 w-5" />
-                {mockPlatforms.length}
+                {platforms.length}
               </p>
             </div>
             <div className="rounded-xl border bg-background p-4">
@@ -83,7 +118,18 @@ export default function PlatformsPage() {
         {filteredPlatforms.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredPlatforms.map((platform) => (
-              <PlatformCard key={platform.id} platform={platform} />
+              <PlatformCard
+                key={platform.id}
+                platform={{
+                  id: platform.slug,
+                  name: platform.name,
+                  logo: platform.logo,
+                  logoColor: platform.logoColor || undefined,
+                  description: platform.description,
+                  category: platform.category,
+                  activeGroups: platform._count.groups,
+                }}
+              />
             ))}
           </div>
         ) : (

@@ -186,11 +186,10 @@ export const auth = betterAuth({
       try {
         const result = await resend.emails.send(emailPayload);
 
-        if (result?.error) {
+        if ((result as { error?: unknown })?.error) {
+          const err = (result as { error: unknown }).error;
           throw new Error(
-            typeof result.error === "string"
-              ? result.error
-              : JSON.stringify(result.error),
+            typeof err === "string" ? err : JSON.stringify(err),
           );
         }
       } catch (error) {
@@ -252,7 +251,7 @@ export const auth = betterAuth({
   },
 
   callbacks: {
-    session: async ({ session, user }) => {
+    session: async ({ session, user }: { session: { user: Record<string, unknown> } & Record<string, unknown>; user: Record<string, unknown> }) => {
       return {
         ...session,
         user: {
@@ -265,4 +264,4 @@ export const auth = betterAuth({
 });
 
 export type Session = typeof auth.$Infer.Session;
-export type User = typeof auth.$Infer.User;
+export type User = Session["user"];
