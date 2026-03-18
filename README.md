@@ -4,11 +4,12 @@
 
 ### 1. Variables d'environnement
 
-Copie le fichier `.env.example` en `.env` et `.env.local`, puis remplis les valeurs :
+Copie le fichier `.env.local.example` en `.env.local` (et éventuellement en `.env`), puis remplis les valeurs. Le fichier `.env.local.example` est committé, tandis que `.env` et `.env.local` restent locaux :
 
 ```bash
-cp .env.example .env
-cp .env.example .env.local
+cp .env.local.example .env.local
+# Optionnel : si tu utilises aussi un fichier .env
+cp .env.local.example .env
 ```
 
 ### 2. Générer le client Prisma
