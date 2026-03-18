@@ -10,11 +10,39 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { useRouter } from "next/navigation"
-import { useEffect } from "react"
+import { useEffect, useState, useCallback } from "react"
+import { CreateGroupDialog } from "@/components/features/groups/CreateGroupDialog"
+import { Users, Plus, Crown, CheckCircle, Clock } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+
+interface GroupData {
+  id: string
+  planLabel: string
+  pricePerMonth: number
+  maxMembers: number
+  invoiceVerified: boolean
+  instantAcceptance: boolean
+  platform: {
+    name: string
+    logo: string
+    logoColor: string | null
+    category: string
+  }
+  owner: {
+    id: string
+    name: string | null
+    image: string | null
+  }
+  _count: {
+    members: number
+  }
+}
 
 export default function DashboardPage() {
   const { data: session, isPending } = useSession()
   const router = useRouter()
+  const [groups, setGroups] = useState<GroupData[]>([])
+  const [loadingGroups, setLoadingGroups] = useState(true)
 
   useEffect(() => {
     if (!isPending && !session) {
@@ -22,13 +50,29 @@ export default function DashboardPage() {
     }
   }, [session, isPending, router])
 
+  const fetchGroups = useCallback(async () => {
+    try {
+      const res = await fetch("/api/groups")
+      if (res.ok) {
+        setGroups(await res.json())
+      }
+    } finally {
+      setLoadingGroups(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (session) {
+      fetchGroups()
+    }
+  }, [session, fetchGroups])
+
   if (isPending || !session) {
     return null
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-zinc-50 to-zinc-100 dark:from-zinc-950 dark:to-zinc-900">
-      {/* Header */}
       <header className="border-b bg-white/50 backdrop-blur-sm dark:bg-zinc-950/50">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <div className="text-xl font-bold">Dividy</div>
@@ -47,74 +91,141 @@ export default function DashboardPage() {
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold">Tableau de bord</h1>
-          <p className="text-muted-foreground mt-2">
-            Bienvenue, {session.user.name || session.user.email} !
-          </p>
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold">Tableau de bord</h1>
+            <p className="text-muted-foreground mt-2">
+              Bienvenue, {session.user.name || session.user.email} !
+            </p>
+          </div>
+          <CreateGroupDialog>
+            <Button>
+              <Plus className="mr-2 h-4 w-4" />
+              Nouveau groupe
+            </Button>
+          </CreateGroupDialog>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           <Card>
             <CardHeader>
-              <CardTitle>Créer un groupe</CardTitle>
+              <CardTitle className="flex items-center gap-2">
+                <Plus className="h-5 w-5" />
+                Créer un groupe
+              </CardTitle>
               <CardDescription>
-                Démarrez un nouveau groupe d'abonnements
+                Partagez votre abonnement avec d&apos;autres membres
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Button className="w-full">Nouveau groupe</Button>
+              <CreateGroupDialog>
+                <Button className="w-full">Nouveau groupe</Button>
+              </CreateGroupDialog>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
-              <CardTitle>Rejoindre un groupe</CardTitle>
+              <CardTitle className="flex items-center gap-2">
+                <Users className="h-5 w-5" />
+                Rejoindre un groupe
+              </CardTitle>
               <CardDescription>
-                Rejoignez un groupe existant avec un code
+                Parcourez les offres disponibles
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Button variant="outline" className="w-full">
-                Rejoindre
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => router.push("/platforms")}
+              >
+                Voir les plateformes
               </Button>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
-              <CardTitle>Mes groupes</CardTitle>
+              <CardTitle className="flex items-center gap-2">
+                <Crown className="h-5 w-5" />
+                Mes groupes
+              </CardTitle>
               <CardDescription>
-                Consultez vos groupes actifs
+                {groups.length} groupe{groups.length !== 1 ? "s" : ""} actif{groups.length !== 1 ? "s" : ""}
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Aucun groupe pour le moment
-              </p>
+              {loadingGroups ? (
+                <p className="text-sm text-muted-foreground">Chargement...</p>
+              ) : groups.length === 0 ? (
+                <p className="text-sm text-muted-foreground">
+                  Aucun groupe pour le moment
+                </p>
+              ) : (
+                <p className="text-sm text-muted-foreground">
+                  {groups.length} groupe{groups.length !== 1 ? "s" : ""} ci-dessous
+                </p>
+              )}
             </CardContent>
           </Card>
         </div>
 
-        <Card className="mt-8">
-          <CardHeader>
-            <CardTitle>À venir</CardTitle>
-            <CardDescription>
-              Fonctionnalités en cours de développement
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li>• Création et gestion des groupes</li>
-              <li>• Gestion des abonnements partagés</li>
-              <li>• Calcul automatique des paiements</li>
-              <li>• Historique des transactions</li>
-              <li>• Notifications de paiement</li>
-            </ul>
-          </CardContent>
-        </Card>
+        {groups.length > 0 && (
+          <div className="mt-8">
+            <h2 className="text-xl font-semibold mb-4">Mes groupes</h2>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {groups.map((group) => (
+                <Card
+                  key={group.id}
+                  className="cursor-pointer transition-shadow hover:shadow-md"
+                  onClick={() => router.push(`/groups/${group.id}`)}
+                >
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-base">
+                        {group.platform.name}
+                      </CardTitle>
+                      {group.owner.id === session.user.id && (
+                        <Badge variant="secondary" className="text-xs">
+                          <Crown className="mr-1 h-3 w-3" />
+                          Owner
+                        </Badge>
+                      )}
+                    </div>
+                    <CardDescription>{group.planLabel}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center justify-between text-sm">
+                      <div className="flex items-center gap-1 text-muted-foreground">
+                        <Users className="h-4 w-4" />
+                        {group._count.members}/{group.maxMembers} membres
+                      </div>
+                      <span className="font-semibold text-green-600">
+                        {group.pricePerMonth.toFixed(2)} &euro;/mois
+                      </span>
+                    </div>
+                    <div className="mt-2 flex gap-2">
+                      {group.invoiceVerified && (
+                        <Badge variant="outline" className="text-xs">
+                          <CheckCircle className="mr-1 h-3 w-3" />
+                          Facture
+                        </Badge>
+                      )}
+                      {group.instantAcceptance && (
+                        <Badge variant="outline" className="text-xs">
+                          <Clock className="mr-1 h-3 w-3" />
+                          Instantané
+                        </Badge>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
       </main>
     </div>
   )
