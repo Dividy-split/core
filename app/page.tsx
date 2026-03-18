@@ -41,16 +41,16 @@ export default function Home() {
 
         <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
           <Link href="/platforms">
-            <Button
-              size="lg"
-              className="text-base bg-green-600 hover:bg-green-700"
-            >
+            <Button size="lg" variant="outline" className="text-base">
               Plateformes
             </Button>
           </Link>
           <Link href="/sign-in">
-            <Button size="lg" variant="outline" className="text-base">
-              Se connecter
+            <Button
+              size="lg"
+              className="text-base bg-green-600 hover:bg-green-700"
+            >
+              C&apos;est parti !
             </Button>
           </Link>
         </div>
