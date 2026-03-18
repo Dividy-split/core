@@ -11,9 +11,7 @@ import {
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { authClient } from "@/lib/auth-client"
 import { Mail, CheckCircle, AlertCircle } from "lucide-react"
-import { Loader2 } from "lucide-react"
 
 export default function VerifyEmailPage() {
   const searchParams = useSearchParams()
