@@ -10,13 +10,19 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { useRouter } from "next/navigation"
+import { useEffect } from "react"
 
 export default function DashboardPage() {
-  const { data: session } = useSession()
+  const { data: session, isPending } = useSession()
   const router = useRouter()
 
-  if (!session) {
-    router.push("/sign-in")
+  useEffect(() => {
+    if (!isPending && !session) {
+      router.push("/sign-in")
+    }
+  }, [session, isPending, router])
+
+  if (isPending || !session) {
     return null
   }
 
