@@ -6,8 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -24,6 +25,10 @@ model User {
 
   // Custom fields for Dividy
   onboardingCompleted Boolean @default(false)
+
+  // Group relations
+  ownedGroups   Group[]       @relation("GroupOwner")
+  memberships   GroupMember[]
 
   @@map("user")
 }
@@ -74,4 +79,57 @@ model Verification {
 
   @@unique([identifier, value])
   @@map("verification")
+}
+
+model Platform {
+  id          String  @id @default(cuid())
+  slug        String  @unique
+  name        String
+  logo        String
+  logoColor   String?
+  description String
+  category    String
+
+  groups Group[]
+
+  @@map("platform")
+}
+
+model Group {
+  id                String   @id @default(cuid())
+  platformId        String
+  ownerId           String
+  planLabel         String
+  pricePerMonth     Float
+  maxMembers        Int
+  invoiceVerified   Boolean  @default(false)
+  instantAcceptance Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  platform Platform     @relation(fields: [platformId], references: [id])
+  owner    User         @relation("GroupOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  members  GroupMember[]
+
+  @@map("group")
+}
+
+model GroupMember {
+  id        String            @id @default(cuid())
+  groupId   String
+  userId    String
+  status    GroupMemberStatus  @default(PENDING)
+  joinedAt  DateTime          @default(now())
+
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([groupId, userId])
+  @@map("group_member")
+}
+
+enum GroupMemberStatus {
+  PENDING
+  ACTIVE
+  REJECTED
 }
