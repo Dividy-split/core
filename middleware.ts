@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { auth } from "@/lib/auth";
 
 export async function middleware(request: NextRequest) {
-  const session = await auth.api.getSession({
+  const res = await fetch(new URL("/api/auth/get-session", request.url), {
     headers: request.headers,
   });
+  const session = res.ok ? await res.json() : null;
 
   const { pathname } = request.nextUrl;
 
