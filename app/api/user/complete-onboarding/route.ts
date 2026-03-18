@@ -1,9 +1,13 @@
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/db"
+import { verifyCsrf } from "@/lib/csrf"
 import { NextRequest, NextResponse } from "next/server"
 
 export async function POST(request: NextRequest) {
   try {
+    const csrfError = verifyCsrf(request)
+    if (csrfError) return csrfError
+
     const session = await auth.api.getSession({
       headers: request.headers,
     })
@@ -12,7 +16,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    // Update user to mark onboarding as completed
+    if (!session.user.emailVerified) {
+      return NextResponse.json(
+        { error: "Email not verified" },
+        { status: 403 }
+      )
+    }
+
     await prisma.user.update({
       where: { id: session.user.id },
       data: { onboardingCompleted: true },
