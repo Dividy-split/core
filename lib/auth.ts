@@ -1,4 +1,5 @@
 import { betterAuth } from "better-auth"
+import { createAuthMiddleware, APIError } from "better-auth/api"
 import { prismaAdapter } from "better-auth/adapters/prisma"
 import { prisma } from "./db"
 import { Resend } from "resend"
@@ -216,11 +217,29 @@ export const auth = betterAuth({
 
   advanced: {
     database: {
-      generateId: () => {
-        // Using Date + random suffix for compact IDs
-        return `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`
-      },
+      generateId: () => crypto.randomUUID(),
     },
+  },
+
+  hooks: {
+    before: createAuthMiddleware(async (ctx) => {
+      if (ctx.path !== "/sign-up/email") {
+        return
+      }
+      const password = ctx.body?.password
+      if (typeof password === "string") {
+        if (!/[A-Z]/.test(password)) {
+          throw new APIError("BAD_REQUEST", {
+            message: "Le mot de passe doit contenir au moins une majuscule",
+          })
+        }
+        if (!/[0-9]/.test(password)) {
+          throw new APIError("BAD_REQUEST", {
+            message: "Le mot de passe doit contenir au moins un chiffre",
+          })
+        }
+      }
+    }),
   },
 
   callbacks: {
