@@ -1,15 +1,24 @@
-import { betterAuth } from "better-auth"
-import { createAuthMiddleware, APIError } from "better-auth/api"
-import { prismaAdapter } from "better-auth/adapters/prisma"
-import { prisma } from "./db"
-import { Resend } from "resend"
+import { betterAuth } from "better-auth";
+import { createAuthMiddleware, APIError } from "better-auth/api";
+import { prismaAdapter } from "better-auth/adapters/prisma";
+import { prisma } from "./db";
+import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
+
+  user: {
+    additionalFields: {
+      onboardingCompleted: {
+        type: "boolean",
+        defaultValue: false,
+      },
+    },
+  },
 
   emailAndPassword: {
     enabled: true,
@@ -172,29 +181,29 @@ export const auth = betterAuth({
             </body>
           </html>
         `,
-      }
+      };
 
       try {
-        const result = await resend.emails.send(emailPayload)
+        const result = await resend.emails.send(emailPayload);
 
         if (result?.error) {
           throw new Error(
             typeof result.error === "string"
               ? result.error
-              : JSON.stringify(result.error)
-          )
+              : JSON.stringify(result.error),
+          );
         }
       } catch (error) {
-        console.error("[auth] Failed to send verification email:", error)
+        console.error("[auth] Failed to send verification email:", error);
 
         if (process.env.NODE_ENV === "production") {
-          throw error
+          throw error;
         }
 
         console.warn(
-          "[auth] Dev fallback active: verification email not sent. Use this URL to verify manually:"
-        )
-        console.warn(url)
+          "[auth] Dev fallback active: verification email not sent. Use this URL to verify manually:",
+        );
+        console.warn(url);
       }
     },
   },
@@ -224,19 +233,19 @@ export const auth = betterAuth({
   hooks: {
     before: createAuthMiddleware(async (ctx) => {
       if (ctx.path !== "/sign-up/email") {
-        return
+        return;
       }
-      const password = ctx.body?.password
+      const password = ctx.body?.password;
       if (typeof password === "string") {
         if (!/[A-Z]/.test(password)) {
           throw new APIError("BAD_REQUEST", {
             message: "Le mot de passe doit contenir au moins une majuscule",
-          })
+          });
         }
         if (!/[0-9]/.test(password)) {
           throw new APIError("BAD_REQUEST", {
             message: "Le mot de passe doit contenir au moins un chiffre",
-          })
+          });
         }
       }
     }),
@@ -250,10 +259,10 @@ export const auth = betterAuth({
           ...session.user,
           onboardingCompleted: user.onboardingCompleted,
         },
-      }
+      };
     },
   },
-})
+});
 
-export type Session = typeof auth.$Infer.Session
-export type User = typeof auth.$Infer.User
+export type Session = typeof auth.$Infer.Session;
+export type User = typeof auth.$Infer.User;
