@@ -65,19 +65,7 @@ export function SignUpForm() {
       })
 
       if (authError) {
-        const errorMessage =
-          typeof authError === "string"
-            ? authError
-            : typeof authError.message === "string"
-              ? authError.message
-              : ""
-        const normalizedMessage = errorMessage.toLowerCase()
-
-        if (normalizedMessage.includes("email")) {
-          setError("Cet email est déjà utilisé")
-        } else {
-          setError(errorMessage || "Erreur lors de l'inscription")
-        }
+        setError("Impossible de créer le compte. Vérifiez vos informations ou essayez avec une autre adresse email.")
         return
       }
 

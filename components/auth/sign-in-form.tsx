@@ -5,8 +5,6 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { useRouter } from "next/navigation"
-import Link from "next/link"
-
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -58,17 +56,11 @@ export function SignInForm() {
             : typeof authError.message === "string"
               ? authError.message
               : ""
-        const normalizedMessage = errorMessage.toLowerCase()
 
-        if (
-          normalizedMessage.includes("not found") ||
-          normalizedMessage.includes("password")
-        ) {
-          setError("Email ou mot de passe incorrect")
-        } else if (normalizedMessage.includes("verify")) {
+        if (errorMessage.toLowerCase().includes("verify")) {
           setError("Veuillez vérifier votre email avant de vous connecter")
         } else {
-          setError(errorMessage || "Erreur lors de la connexion")
+          setError("Email ou mot de passe incorrect")
         }
         return
       }
@@ -116,15 +108,7 @@ export function SignInForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <div className="flex items-center justify-between">
-                <FormLabel>Mot de passe</FormLabel>
-                <Link
-                  href="/reset-password"
-                  className="text-xs text-muted-foreground hover:text-primary"
-                >
-                  Mot de passe oublié ?
-                </Link>
-              </div>
+              <FormLabel>Mot de passe</FormLabel>
               <FormControl>
                 <Input
                   type="password"
