@@ -192,9 +192,8 @@ export const auth = betterAuth({
         }
 
         console.warn(
-          "[auth] Dev fallback active: verification email not sent. Use this URL to verify manually:"
+          "[auth] Dev fallback active: verification email not sent. Check your email service configuration."
         )
-        console.warn(url)
       }
     },
   },

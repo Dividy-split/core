@@ -19,7 +19,7 @@ export function SocialLoginButtons() {
       })
     } catch (err) {
       setError(`Erreur de connexion ${provider}. Veuillez réessayer.`)
-      console.error("Social login error:", err)
+      console.error("Social login error:", err instanceof Error ? err.message : "Unknown error")
       setIsLoading(null)
     }
   }

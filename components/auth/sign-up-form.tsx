@@ -28,7 +28,8 @@ const signUpSchema = z
       .string()
       .min(8, "Le mot de passe doit contenir au moins 8 caractères")
       .regex(/[A-Z]/, "Le mot de passe doit contenir au moins une majuscule")
-      .regex(/[0-9]/, "Le mot de passe doit contenir au moins un chiffre"),
+      .regex(/[0-9]/, "Le mot de passe doit contenir au moins un chiffre")
+      .regex(/[!@#$%^&*()_+=[\]{};:<>,.?/-]/, "Le mot de passe doit contenir au moins un caractère spécial"),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -69,8 +70,9 @@ export function SignUpForm() {
         return
       }
 
-      // Redirect to email verification page
-      router.push("/verify-email?email=" + encodeURIComponent(values.email))
+      // Store email in sessionStorage to avoid exposing it in the URL
+      sessionStorage.setItem("pendingVerificationEmail", values.email)
+      router.push("/verify-email")
     } catch (err) {
       setError(
         "Une erreur inattendue s'est produite. Veuillez réessayer."

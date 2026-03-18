@@ -1,7 +1,7 @@
 "use client"
 
-import { useSearchParams, useRouter } from "next/navigation"
-import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { useState, useEffect } from "react"
 import {
   Card,
   CardContent,
@@ -16,13 +16,21 @@ import { Mail, CheckCircle, AlertCircle } from "lucide-react"
 import { Loader2 } from "lucide-react"
 
 export default function VerifyEmailPage() {
-  const searchParams = useSearchParams()
   const router = useRouter()
-  const email = searchParams.get("email")
+  const [email, setEmail] = useState<string | null>(null)
 
   const [isResending, setIsResending] = useState(false)
   const [resendSuccess, setResendSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const stored = sessionStorage.getItem("pendingVerificationEmail")
+    if (stored) {
+      setEmail(stored)
+    } else {
+      router.replace("/sign-up")
+    }
+  }, [router])
 
   const handleResend = async () => {
     if (!email) {
@@ -34,13 +42,21 @@ export default function VerifyEmailPage() {
     setError(null)
 
     try {
-      // BetterAuth doesn't have a resend method, so we'll use signUp with resendEmail
-      // For now, we'll show a message to check email
+      const { error: resendError } = await authClient.sendVerificationEmail({
+        email,
+        callbackURL: "/onboarding",
+      })
+
+      if (resendError) {
+        setError("Erreur lors du renvoi de l'email. Veuillez réessayer.")
+        return
+      }
+
       setResendSuccess(true)
       setTimeout(() => setResendSuccess(false), 5000)
     } catch (err) {
       setError("Erreur lors du renvoi de l'email. Veuillez réessayer.")
-      console.error("Resend error:", err)
+      console.error("Resend error:", err instanceof Error ? err.message : "Unknown error")
     } finally {
       setIsResending(false)
     }

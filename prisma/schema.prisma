@@ -73,5 +73,6 @@ model Verification {
   updatedAt  DateTime @updatedAt
 
   @@unique([identifier, value])
+  @@index([expiresAt])
   @@map("verification")
 }

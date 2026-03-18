@@ -9,13 +9,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { redirect } from "next/navigation"
+import { Loader2 } from "lucide-react"
 
 export default function DashboardPage() {
   const { data: session } = useSession()
 
   if (!session) {
-    redirect("/sign-in")
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    )
   }
 
   return (
