@@ -1,5 +1,3 @@
-import type { NextConfig } from "next"
-
 const devOrigins = [
   "http://localhost:3000",
   "http://127.0.0.1:3000",
@@ -10,7 +8,8 @@ const extraDevOrigins = extraDevOriginsEnv
   ? extraDevOriginsEnv.split(",").map((origin) => origin.trim()).filter(Boolean)
   : []
 
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   allowedDevOrigins: [...devOrigins, ...extraDevOrigins],
 }
 
