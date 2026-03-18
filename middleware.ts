@@ -22,6 +22,12 @@ export async function middleware(request: NextRequest) {
     (route) => pathname === route || pathname.startsWith(route + "/"),
   );
 
+  // Auth-related routes (used to redirect authenticated users away from auth pages)
+  const authRoutes = ["/sign-in", "/sign-up", "/verify-email", "/reset-password"];
+  const isAuthRoute = authRoutes.some(
+    (route) => pathname === route || pathname.startsWith(route + "/"),
+  );
+
   // API routes are always allowed
   if (pathname.startsWith("/api/")) {
     return NextResponse.next();
@@ -55,7 +61,7 @@ export async function middleware(request: NextRequest) {
   if (
     session &&
     session.user.emailVerified &&
-    isPublicRoute &&
+    isAuthRoute &&
     pathname !== "/"
   ) {
     const redirectUrl = session.user.onboardingCompleted
