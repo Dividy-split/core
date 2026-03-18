@@ -1,11 +1,12 @@
 'use client';
 
+import Link from 'next/link';
 import { useState, useMemo, useEffect } from 'react';
 import PlatformCard from '@/components/features/platforms/PlatformCard';
 import CategoryFilter from '@/components/features/platforms/CategoryFilter';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Grid3X3, SearchIcon, Tag } from 'lucide-react';
+import { ArrowLeft, Grid3X3, SearchIcon, Tag } from 'lucide-react';
 
 interface PlatformData {
   id: string;
@@ -60,6 +61,14 @@ export default function PlatformsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20 px-4 py-10 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl space-y-8">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Retour à l&apos;accueil
+        </Link>
+
         <section className="rounded-2xl border bg-card/80 p-6 backdrop-blur-sm md:p-8">
           <div className="mb-8 text-center">
             <h1 className="mb-3 text-4xl font-bold tracking-tight md:text-5xl">Plateformes disponibles</h1>
