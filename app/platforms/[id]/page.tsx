@@ -7,14 +7,14 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import PlatformLogo from '@/components/ui/platformLogo';
-import { getOffersByPlatformId } from '@/data/mockPlatformOffers';
-import { mockPlatforms } from '@/data/mockPlatforms';
+import { prisma } from '@/lib/db';
 
 interface PlatformDetailPageProps {
 	params: Promise<{ id: string }>;
 }
 
-function getInitials(name: string) {
+function getInitials(name: string | null) {
+	if (!name) return '?';
 	return name
 		.split(' ')
 		.map((word) => word[0])
@@ -25,15 +25,26 @@ function getInitials(name: string) {
 
 export default async function PlatformDetailPage({ params }: PlatformDetailPageProps) {
 	const { id } = await params;
-	const platform = mockPlatforms.find((item) => item.id === id);
+
+	const platform = await prisma.platform.findUnique({
+		where: { slug: id },
+	});
 
 	if (!platform) {
 		notFound();
 	}
 
-	const offers = getOffersByPlatformId(platform.id);
-	const planFilters = ['Tous', ...new Set(offers.map((offer) => offer.planLabel))];
-	const lowestPrice = Math.min(...offers.map((offer) => offer.pricePerMonth));
+	const groups = await prisma.group.findMany({
+		where: { platformId: platform.id },
+		include: {
+			owner: { select: { id: true, name: true, image: true } },
+			_count: { select: { members: { where: { status: 'ACTIVE' } } } },
+		},
+		orderBy: { createdAt: 'desc' },
+	});
+
+	const planFilters = ['Tous', ...new Set(groups.map((g) => g.planLabel))];
+	const lowestPrice = groups.length > 0 ? Math.min(...groups.map((g) => g.pricePerMonth)) : 0;
 
 	return (
 		<div className="min-h-screen bg-gradient-to-b from-background to-muted/20 px-4 py-10 sm:px-6 lg:px-8">
@@ -62,15 +73,17 @@ export default async function PlatformDetailPage({ params }: PlatformDetailPageP
 						<div className="mx-auto grid max-w-2xl grid-cols-1 gap-3 sm:grid-cols-3">
 							<div className="rounded-xl border bg-background p-3">
 								<p className="text-xs text-muted-foreground">Offres disponibles</p>
-								<p className="text-2xl font-semibold">{offers.length}</p>
+								<p className="text-2xl font-semibold">{groups.length}</p>
 							</div>
 							<div className="rounded-xl border bg-background p-3">
 								<p className="text-xs text-muted-foreground">Prix à partir de</p>
-								<p className="text-2xl font-semibold">{lowestPrice.toFixed(2).replace('.', ',')}€</p>
+								<p className="text-2xl font-semibold">
+									{groups.length > 0 ? `${lowestPrice.toFixed(2).replace('.', ',')}€` : '-'}
+								</p>
 							</div>
 							<div className="rounded-xl border bg-background p-3">
 								<p className="text-xs text-muted-foreground">Groupes actifs</p>
-								<p className="text-2xl font-semibold">{platform.activeGroups}</p>
+								<p className="text-2xl font-semibold">{groups.length}</p>
 							</div>
 						</div>
 					</div>
@@ -123,51 +136,62 @@ export default async function PlatformDetailPage({ params }: PlatformDetailPageP
 					</Card>
 
 					<div className="space-y-3">
-						{offers.map((offer) => (
-							<Card key={offer.id} className="rounded-2xl border bg-card/90 transition-shadow hover:shadow-lg">
-								<CardContent className="flex flex-col gap-5 p-5 md:flex-row md:items-center md:justify-between md:p-6">
-									<div className="flex items-start gap-4">
-										<Avatar className="size-12 border">
-											<AvatarFallback>{getInitials(offer.sellerName)}</AvatarFallback>
-										</Avatar>
-
-										<div className="space-y-2">
-											<div className="flex items-center gap-2">
-												<p className="font-semibold">{offer.sellerName}</p>
-												{typeof offer.trustScore === 'number' && <Badge variant="secondary">Indice {offer.trustScore}</Badge>}
-											</div>
-
-											<div className="flex items-center gap-2 text-sm text-muted-foreground">
-												<div className="flex h-7 w-7 items-center justify-center rounded-md border bg-background">
-													<PlatformLogo
-														iconName={platform.logo}
-														color={platform.logoColor || 'currentColor'}
-														size={16}
-														fallbackLabel={platform.name}
-													/>
-												</div>
-												<span>{offer.planLabel}</span>
-											</div>
-
-											<div className="flex flex-wrap gap-2">
-												{offer.invoiceVerified && <Badge variant="secondary">Facture vérifiée</Badge>}
-												{offer.instantAcceptance && <Badge variant="secondary">Acceptation instantanée</Badge>}
-											</div>
-										</div>
-									</div>
-
-									<div className="flex items-center gap-4 md:gap-6">
-										<div className="text-right">
-											<p className="text-3xl font-bold">{offer.pricePerMonth.toFixed(2).replace('.', ',')}€</p>
-											<p className="text-sm text-muted-foreground">/ mois</p>
-										</div>
-										<Button asChild>
-											<Link href={`/platforms/${platform.id}/subscribe?offer=${offer.id}`}>S&apos;abonner</Link>
-										</Button>
-									</div>
+						{groups.length === 0 ? (
+							<Card className="rounded-2xl">
+								<CardContent className="p-6 text-center text-muted-foreground">
+									Aucun groupe disponible pour le moment. Soyez le premier à partager votre abonnement !
 								</CardContent>
 							</Card>
-						))}
+						) : (
+							groups.map((group) => (
+								<Card key={group.id} className="rounded-2xl border bg-card/90 transition-shadow hover:shadow-lg">
+									<CardContent className="flex flex-col gap-5 p-5 md:flex-row md:items-center md:justify-between md:p-6">
+										<div className="flex items-start gap-4">
+											<Avatar className="size-12 border">
+												<AvatarFallback>{getInitials(group.owner.name)}</AvatarFallback>
+											</Avatar>
+
+											<div className="space-y-2">
+												<div className="flex items-center gap-2">
+													<p className="font-semibold">{group.owner.name || 'Utilisateur'}</p>
+												</div>
+
+												<div className="flex items-center gap-2 text-sm text-muted-foreground">
+													<div className="flex h-7 w-7 items-center justify-center rounded-md border bg-background">
+														<PlatformLogo
+															iconName={platform.logo}
+															color={platform.logoColor || 'currentColor'}
+															size={16}
+															fallbackLabel={platform.name}
+														/>
+													</div>
+													<span>{group.planLabel}</span>
+												</div>
+
+												<div className="flex flex-wrap gap-2">
+													{group.invoiceVerified && <Badge variant="secondary">Facture vérifiée</Badge>}
+													{group.instantAcceptance && <Badge variant="secondary">Acceptation instantanée</Badge>}
+													<Badge variant="outline">
+														<Users className="mr-1 h-3 w-3" />
+														{group._count.members}/{group.maxMembers}
+													</Badge>
+												</div>
+											</div>
+										</div>
+
+										<div className="flex items-center gap-4 md:gap-6">
+											<div className="text-right">
+												<p className="text-3xl font-bold">{group.pricePerMonth.toFixed(2).replace('.', ',')}€</p>
+												<p className="text-sm text-muted-foreground">/ mois</p>
+											</div>
+											<Button asChild>
+												<Link href={`/groups/${group.id}`}>Voir le groupe</Link>
+											</Button>
+										</div>
+									</CardContent>
+								</Card>
+							))
+						)}
 					</div>
 				</div>
 			</div>
