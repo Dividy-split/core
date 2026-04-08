@@ -12,29 +12,26 @@ import {
 import { Button } from "@/components/ui/button"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { CheckCircle2, LogOut } from "lucide-react"
-import { signOut } from "@/lib/auth-client"
+import { authClient } from "@/lib/auth-client"
 
 export default function OnboardingPage() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [isSigningOut, setIsSigningOut] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const auth = authClient as {
+    updateUser: (data: { onboardingCompleted: boolean }) => Promise<unknown>
+    signOut: () => Promise<unknown>
+  }
 
   const handleComplete = async () => {
     setIsLoading(true)
     setError(null)
 
     try {
-      // Call API to mark onboarding as complete
-      const response = await fetch("/api/user/complete-onboarding", {
-        method: "POST",
-      })
+      await auth.updateUser({ onboardingCompleted: true })
 
-      if (!response.ok) {
-        throw new Error("Failed to complete onboarding")
-      }
-
-      router.push("/dashboard")
+      router.replace("/dashboard")
       router.refresh()
     } catch (err) {
       setError("Erreur lors de la fin de l'onboarding. Veuillez réessayer.")
@@ -47,7 +44,7 @@ export default function OnboardingPage() {
   const handleSignOut = async () => {
     setIsSigningOut(true)
     try {
-      await signOut()
+      await auth.signOut()
       router.push("/")
     } catch (err) {
       setError("Erreur lors de la déconnexion. Veuillez réessayer.")
