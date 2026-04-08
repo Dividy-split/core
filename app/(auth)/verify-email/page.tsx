@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import {
   Card,
   CardContent,
@@ -15,6 +15,14 @@ import { Mail, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 export default function VerifyEmailPage() {
+  return (
+    <Suspense>
+      <VerifyEmailContent />
+    </Suspense>
+  );
+}
+
+function VerifyEmailContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const email = searchParams.get("email");
