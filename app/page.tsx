@@ -49,25 +49,25 @@ const featureCards = [
   {
     title: "Un cadre clair",
     description:
-      "Chaque groupe sait qui participe, combien chacun doit payer et quand il faut agir.",
+      "Chaque groupe correspond a un abonnement precis, avec une repartition simple et lisible.",
     icon: Users,
   },
   {
     title: "Un suivi simple",
     description:
-      "L'onboarding, la verification d'email et l'acces au dashboard sont deja integres dans le produit.",
+      "Tu vois rapidement qui participe, combien il reste de places et ce que chacun paie.",
     icon: Check,
   },
   {
     title: "Une base secure",
     description:
-      "Authentification email, Google OAuth, sessions persistantes et verification d'adresse sont deja en place.",
+      "Le partage se fait dans un espace plus propre qu'une conversation ou un tableur improvise.",
     icon: Shield,
   },
   {
     title: "Un usage concret",
     description:
-      "L'outil est pense pour des vrais groupes: amis, colocs, couples, fratries ou equipes.",
+      "L'outil est pense pour des vrais usages: amis, colocs, couples, fratries ou petites equipes.",
     icon: CreditCard,
   },
 ]
@@ -121,9 +121,8 @@ export default function Home() {
             </h1>
 
             <p className="mt-6 max-w-xl text-lg leading-8 text-zinc-600 sm:text-xl">
-              Dividy centralise qui participe, combien chacun doit payer et ou
-              vous en etes. Moins d&apos;oublis, moins de discussions inutiles,
-              plus d&apos;economies.
+              Dividy t&apos;aide a gerer un abonnement partage avec un groupe
+              dedie. Un service, un groupe, une repartition claire.
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -150,11 +149,11 @@ export default function Home() {
             <div className="mt-10 grid gap-4 text-sm text-zinc-600 sm:grid-cols-3">
               <div className="rounded-2xl border border-white/70 bg-white/70 p-4 shadow-sm backdrop-blur">
                 <p className="text-2xl font-semibold text-zinc-950">4 min</p>
-                <p className="mt-1">pour lancer un groupe et inviter tout le monde</p>
+                <p className="mt-1">pour ouvrir un groupe autour d&apos;un abonnement</p>
               </div>
               <div className="rounded-2xl border border-white/70 bg-white/70 p-4 shadow-sm backdrop-blur">
                 <p className="text-2xl font-semibold text-zinc-950">1 espace</p>
-                <p className="mt-1">pour suivre verification, onboarding et acces</p>
+                <p className="mt-1">pour suivre qui partage le service et a quel prix</p>
               </div>
               <div className="rounded-2xl border border-white/70 bg-white/70 p-4 shadow-sm backdrop-blur">
                 <p className="text-2xl font-semibold text-zinc-950">0 flou</p>
@@ -169,13 +168,13 @@ export default function Home() {
               <CardHeader className="border-b border-zinc-100 bg-zinc-50/80">
                 <div className="flex items-center justify-between gap-4">
                   <div>
-                    <CardTitle className="text-xl">Groupe Premium Maison</CardTitle>
+                    <CardTitle className="text-xl">Groupe Netflix Premium</CardTitle>
                     <CardDescription>
-                      4 participants, 3 abonnements actifs
+                      3 participants deja dans le groupe
                     </CardDescription>
                   </div>
                   <Badge className="rounded-full bg-green-600 px-3 py-1 text-white hover:bg-green-600">
-                    82EUR economises
+                    17,24EUR economises
                   </Badge>
                 </div>
               </CardHeader>
@@ -183,10 +182,10 @@ export default function Home() {
               <CardContent className="space-y-6 p-6">
                 <div className="rounded-2xl border border-green-100 bg-green-50 p-4">
                   <p className="text-sm font-medium text-green-800">
-                    Ce mois-ci, votre groupe partage Netflix, Spotify et Adobe.
+                    Ce groupe partage uniquement Netflix Premium.
                   </p>
                   <p className="mt-2 text-3xl font-semibold tracking-tight text-green-900">
-                    28,07EUR
+                    5,75EUR
                     <span className="ml-2 text-sm font-medium text-green-700">
                       par personne
                     </span>
@@ -196,42 +195,30 @@ export default function Home() {
                 <div className="space-y-3">
                   <div className="flex items-center justify-between rounded-2xl border border-zinc-200 p-4">
                     <div>
-                      <p className="font-medium">Netflix Premium</p>
-                      <p className="text-sm text-zinc-500">22,99EUR / 4 personnes</p>
+                      <p className="font-medium">Prix total</p>
+                      <p className="text-sm text-zinc-500">Abonnement mensuel</p>
                     </div>
-                    <p className="font-semibold text-zinc-950">5,75EUR</p>
+                    <p className="font-semibold text-zinc-950">22,99EUR</p>
                   </div>
                   <div className="flex items-center justify-between rounded-2xl border border-zinc-200 p-4">
                     <div>
-                      <p className="font-medium">Spotify Family</p>
-                      <p className="text-sm text-zinc-500">17,99EUR / 6 personnes</p>
+                      <p className="font-medium">Places occupees</p>
+                      <p className="text-sm text-zinc-500">
+                        Ajoute encore une personne pour reduire les frais par membre
+                      </p>
                     </div>
-                    <p className="font-semibold text-zinc-950">3,00EUR</p>
+                    <p className="shrink-0 whitespace-nowrap pl-4 text-right text-2xl font-semibold text-zinc-950">
+                      3 / 4
+                    </p>
                   </div>
                   <div className="flex items-center justify-between rounded-2xl border border-zinc-200 p-4">
                     <div>
-                      <p className="font-medium">Adobe Creative Cloud</p>
-                      <p className="text-sm text-zinc-500">60,49EUR / 4 personnes</p>
+                      <p className="font-medium">Mode d&apos;entree</p>
+                      <p className="text-sm text-zinc-500">Validation manuelle par le createur du groupe</p>
                     </div>
-                    <p className="font-semibold text-zinc-950">15,12EUR</p>
-                  </div>
-                </div>
-
-                <div className="rounded-2xl bg-zinc-950 p-5 text-white">
-                  <p className="text-sm text-zinc-300">Etat du groupe</p>
-                  <div className="mt-3 grid grid-cols-3 gap-3 text-center">
-                    <div>
-                      <p className="text-2xl font-semibold">4/4</p>
-                      <p className="text-xs text-zinc-400">invites</p>
-                    </div>
-                    <div>
-                      <p className="text-2xl font-semibold">3</p>
-                      <p className="text-xs text-zinc-400">services</p>
-                    </div>
-                    <div>
-                      <p className="text-2xl font-semibold">100%</p>
-                      <p className="text-xs text-zinc-400">visible</p>
-                    </div>
+                    <p className="shrink-0 whitespace-nowrap pl-4 text-right text-2xl font-semibold text-zinc-950">
+                      Prive
+                    </p>
                   </div>
                 </div>
               </CardContent>
@@ -260,13 +247,13 @@ export default function Home() {
                 </div>
                 <CardTitle>Creer le groupe</CardTitle>
                 <CardDescription>
-                  Tu structures le partage au lieu de bricoler dans une
-                  discussion.
+                  Tu ouvres un groupe pour un abonnement precis, pas une pile
+                  de services melanges.
                 </CardDescription>
               </CardHeader>
               <CardContent className="text-sm leading-7 text-zinc-600">
-                Definis le cadre, ajoutes les participants et poses une base
-                claire pour les paiements et les acces.
+                Choisis la plateforme, fixes les places disponibles et invites
+                les bonnes personnes.
               </CardContent>
             </Card>
 
@@ -277,12 +264,12 @@ export default function Home() {
                 </div>
                 <CardTitle>Repartir les abonnements</CardTitle>
                 <CardDescription>
-                  Chaque service est visible, chaque part est compréhensible.
+                  Chaque groupe a son prix, ses membres et son equilibre.
                 </CardDescription>
               </CardHeader>
               <CardContent className="text-sm leading-7 text-zinc-600">
-                Tu vois tout de suite ce que coute un abonnement en solo et ce
-                qu&apos;il devient une fois partage.
+                Tu comprends tout de suite combien coute l&apos;abonnement en
+                solo et combien il revient une fois partage.
               </CardContent>
             </Card>
 
@@ -293,11 +280,11 @@ export default function Home() {
                 </div>
                 <CardTitle>Suivre sans se prendre la tete</CardTitle>
                 <CardDescription>
-                  Verification, onboarding et acces sont deja penses dans le produit.
+                  Pas besoin de renegocier le cadre a chaque nouveau service.
                 </CardDescription>
               </CardHeader>
               <CardContent className="text-sm leading-7 text-zinc-600">
-                Tu reduis les relances, les oublis et les questions repetitives.
+                Un groupe reste lisible, ferme et simple a suivre dans le temps.
               </CardContent>
             </Card>
           </div>
@@ -374,7 +361,7 @@ export default function Home() {
               Pourquoi Dividy
             </Badge>
             <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-              Une landing sobre ne suffit pas. Il faut une promesse credible.
+              Une facon plus claire de partager des services sans confusion
             </h2>
           </div>
 
@@ -407,16 +394,14 @@ export default function Home() {
             <CardContent className="flex flex-col gap-8 p-8 lg:flex-row lg:items-center lg:justify-between lg:p-10">
               <div className="max-w-2xl">
                 <p className="text-sm uppercase tracking-[0.22em] text-zinc-400">
-                  Lancer la suite
+                  Passer a l&apos;action
                 </p>
                 <h3 className="mt-3 text-3xl font-semibold tracking-tight text-balance">
-                  La base auth est la. Il faut maintenant une page
-                  d&apos;entree qui donne envie de passer a l&apos;action.
+                  Ouvre ton premier groupe et partage un abonnement proprement.
                 </h3>
                 <p className="mt-4 text-sm leading-7 text-zinc-300">
-                  Inscription email, connexion Google, verification et
-                  onboarding existent deja. La landing doit simplement rendre la
-                  promesse lisible et donner un chemin clair vers le produit.
+                  Cree un espace dedie a un service, invites les bonnes
+                  personnes et rends enfin le partage lisible.
                 </p>
               </div>
 
