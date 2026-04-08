@@ -1,21 +1,21 @@
-"use client";
+"use client"
 
-import { useState, useEffect } from "react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { 
+import { useState, useEffect } from "react"
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import {
   Home,
   HelpCircle,
   DollarSign,
   Star,
   Menu,
-  X
-} from "lucide-react";
+  X,
+} from "lucide-react"
 
 interface Section {
-  id: string;
-  label: string;
-  icon: React.ElementType;
+  id: string
+  label: string
+  icon: React.ElementType
 }
 
 const sections: Section[] = [
@@ -39,66 +39,60 @@ const sections: Section[] = [
     label: "Avantages",
     icon: Star,
   },
-];
+]
 
 export function HomeSidebar() {
-  const [activeSection, setActiveSection] = useState("hero");
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("hero")
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id || "hero");
-          }
-        });
-      },
-      {
-        threshold: 0.3,
-        rootMargin: "-20% 0px -60% 0px",
-      }
-    );
+    const sectionElements = sections
+      .map((section) => document.getElementById(section.id))
+      .filter((element): element is HTMLElement => element !== null)
 
-    // Observer toutes les sections
-    const sectionElements = sections.map(section => 
-      document.getElementById(section.id) || document.querySelector("section")
-    );
-    
-    sectionElements.forEach((element) => {
-      if (element) {
-        observer.observe(element);
+    const updateActiveSection = () => {
+      if (sectionElements.length === 0) {
+        return
       }
-    });
+
+      const viewportAnchor = window.innerHeight * 0.35
+      let nextActiveSection = sectionElements[0].id
+
+      for (const element of sectionElements) {
+        const { top } = element.getBoundingClientRect()
+        if (top <= viewportAnchor) {
+          nextActiveSection = element.id
+        } else {
+          break
+        }
+      }
+
+      setActiveSection(nextActiveSection)
+    }
+
+    updateActiveSection()
+    window.addEventListener("scroll", updateActiveSection, { passive: true })
+    window.addEventListener("resize", updateActiveSection)
 
     return () => {
-      sectionElements.forEach((element) => {
-        if (element) {
-          observer.unobserve(element);
-        }
-      });
-    };
-  }, []);
+      window.removeEventListener("scroll", updateActiveSection)
+      window.removeEventListener("resize", updateActiveSection)
+    }
+  }, [])
 
   const scrollToSection = (sectionId: string) => {
     if (sectionId === "hero") {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.scrollTo({ top: 0, behavior: "smooth" })
     } else {
-      const element = document.getElementById(sectionId);
+      const element = document.getElementById(sectionId)
       if (element) {
-        let offset = 80; // Offset par défaut
-        
-        // Pour la section "features", on descend un peu plus bas pour montrer la CTA
-        if (sectionId === "features") {
-          offset = 10; // Offset négatif réduit davantage
-        }
-        
-        const elementPosition = element.offsetTop - offset;
-        window.scrollTo({ top: elementPosition, behavior: "smooth" });
+        const offset = 88
+        const elementPosition = element.offsetTop - offset
+        window.scrollTo({ top: elementPosition, behavior: "smooth" })
       }
     }
-    setIsMobileMenuOpen(false); // Fermer le menu mobile après navigation
-  };
+    setIsMobileMenuOpen(false)
+  }
 
   return (
     <>
@@ -107,12 +101,12 @@ export function HomeSidebar() {
         <nav className="relative">
           {/* Fil vertical centré par rapport aux bornes */}
           <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-zinc-300 dark:bg-zinc-600"></div>
-          
+
           <div className="space-y-6">
-            {sections.map((section, index) => {
-              const Icon = section.icon;
-              const isActive = activeSection === section.id;
-              
+            {sections.map((section) => {
+              const Icon = section.icon
+              const isActive = activeSection === section.id
+
               return (
                 <div key={section.id} className="relative flex items-center group">
                   {/* Borne/Point sur le fil */}
@@ -121,17 +115,21 @@ export function HomeSidebar() {
                     className={cn(
                       "relative z-10 flex items-center justify-center w-8 h-8 rounded-full border-2 transition-all duration-300",
                       "bg-white dark:bg-zinc-900",
-                      isActive 
-                        ? "border-green-600 bg-green-600 text-white shadow-lg scale-110" 
+                      isActive
+                        ? "border-green-600 bg-green-600 text-white shadow-lg scale-110"
                         : "border-zinc-300 dark:border-zinc-600 hover:border-green-500 hover:scale-105"
                     )}
                   >
-                    <Icon className={cn(
-                      "size-3 transition-colors",
-                      isActive ? "text-white" : "text-zinc-600 dark:text-zinc-400 group-hover:text-green-600"
-                    )} />
+                    <Icon
+                      className={cn(
+                        "size-3 transition-colors",
+                        isActive
+                          ? "text-white"
+                          : "text-zinc-600 dark:text-zinc-400 group-hover:text-green-600"
+                      )}
+                    />
                   </button>
-                  
+
                   {/* Label */}
                   <button
                     onClick={() => scrollToSection(section.id)}
@@ -139,15 +137,15 @@ export function HomeSidebar() {
                       "ml-4 px-3 py-1 rounded-md text-sm font-medium transition-all duration-300",
                       "opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0",
                       isActive && "opacity-100 translate-x-0",
-                      isActive 
-                        ? "bg-green-600 text-white shadow-md" 
+                      isActive
+                        ? "bg-green-600 text-white shadow-md"
                         : "bg-white/80 dark:bg-zinc-800/80 backdrop-blur-sm text-zinc-700 dark:text-zinc-300 hover:bg-green-50 dark:hover:bg-green-900/20"
                     )}
                   >
                     {section.label}
                   </button>
                 </div>
-              );
+              )
             })}
           </div>
         </nav>
@@ -172,9 +170,9 @@ export function HomeSidebar() {
           <div className="fixed bottom-20 right-6 z-40 bg-white/95 dark:bg-zinc-900/95 backdrop-blur-sm border border-zinc-200 dark:border-zinc-700 rounded-lg p-3 shadow-xl min-w-[200px]">
             <nav className="space-y-2">
               {sections.map((section) => {
-                const Icon = section.icon;
-                const isActive = activeSection === section.id;
-                
+                const Icon = section.icon
+                const isActive = activeSection === section.id
+
                 return (
                   <Button
                     key={section.id}
@@ -193,7 +191,7 @@ export function HomeSidebar() {
                       <div className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-6 bg-green-600 rounded-full" />
                     )}
                   </Button>
-                );
+                )
               })}
             </nav>
           </div>
@@ -208,5 +206,5 @@ export function HomeSidebar() {
         )}
       </div>
     </>
-  );
+  )
 }
