@@ -2,7 +2,9 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export async function proxy(request: NextRequest) {
-  const res = await fetch(new URL("/api/auth/get-session", request.url), {
+  const internalUrl = new URL("/api/auth/get-session", request.url);
+  internalUrl.protocol = "http:";
+  const res = await fetch(internalUrl, {
     headers: request.headers,
   });
   const session = res.ok ? await res.json() : null;
@@ -23,7 +25,12 @@ export async function proxy(request: NextRequest) {
   );
 
   // Auth-related routes (used to redirect authenticated users away from auth pages)
-  const authRoutes = ["/sign-in", "/sign-up", "/verify-email", "/reset-password"];
+  const authRoutes = [
+    "/sign-in",
+    "/sign-up",
+    "/verify-email",
+    "/reset-password",
+  ];
   const isAuthRoute = authRoutes.some(
     (route) => pathname === route || pathname.startsWith(route + "/"),
   );
