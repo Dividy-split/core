@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
@@ -14,22 +14,22 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { signIn } from "@/lib/auth-client"
-import { Loader2 } from "lucide-react"
+} from "@/components/ui/form";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { signIn } from "@/lib/auth-client";
+import { Loader2 } from "lucide-react";
 
 const signInSchema = z.object({
   email: z.string().email("Veuillez entrer une adresse email valide"),
   password: z.string().min(1, "Le mot de passe est requis"),
-})
+});
 
-type SignInFormValues = z.infer<typeof signInSchema>
+type SignInFormValues = z.infer<typeof signInSchema>;
 
 export function SignInForm() {
-  const router = useRouter()
-  const [error, setError] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<SignInFormValues>({
     resolver: zodResolver(signInSchema),
@@ -37,17 +37,17 @@ export function SignInForm() {
       email: "",
       password: "",
     },
-  })
+  });
 
   async function onSubmit(values: SignInFormValues) {
-    setIsLoading(true)
-    setError(null)
+    setIsLoading(true);
+    setError(null);
 
     try {
       const { error: authError } = await signIn.email({
         email: values.email,
         password: values.password,
-      })
+      });
 
       if (authError) {
         const errorMessage =
@@ -55,23 +55,23 @@ export function SignInForm() {
             ? authError
             : typeof authError.message === "string"
               ? authError.message
-              : ""
+              : "";
 
         if (errorMessage.toLowerCase().includes("verify")) {
-          setError("Veuillez vérifier votre email avant de vous connecter")
+          setError("Veuillez vérifier votre email avant de vous connecter");
         } else {
-          setError("Email ou mot de passe incorrect")
+          setError("Email ou mot de passe incorrect");
         }
-        return
+        return;
       }
 
-      router.push("/dashboard")
-      router.refresh()
+      router.push("/dashboard");
+      router.refresh();
     } catch (err) {
-      setError("Une erreur inattendue s'est produite. Veuillez réessayer.")
-      console.error("Sign in error:", err)
+      setError("Une erreur inattendue s'est produite. Veuillez réessayer.");
+      console.error("Sign in error:", err);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
@@ -122,7 +122,11 @@ export function SignInForm() {
           )}
         />
 
-        <Button type="submit" className="w-full" disabled={isLoading}>
+        <Button
+          type="submit"
+          className="w-full bg-green-600 text-white hover:bg-green-700"
+          disabled={isLoading}
+        >
           {isLoading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -134,5 +138,5 @@ export function SignInForm() {
         </Button>
       </form>
     </Form>
-  )
+  );
 }
