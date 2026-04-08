@@ -90,6 +90,7 @@ export default function GroupDetailPage() {
   const [group, setGroup] = useState<GroupDetail | null>(null)
   const [loading, setLoading] = useState(true)
   const [joining, setJoining] = useState(false)
+  const [leaving, setLeaving] = useState(false)
 
   useEffect(() => {
     if (!isPending && !session) {
@@ -134,6 +135,26 @@ export default function GroupDetailPage() {
       toast.error(err instanceof Error ? err.message : "Erreur")
     } finally {
       setJoining(false)
+    }
+  }
+
+  async function handleLeave() {
+    setLeaving(true)
+    try {
+      const res = await fetch(`/api/groups/${groupId}/leave`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error)
+
+      toast.success("Vous avez quitté le groupe")
+      const refreshed = await fetch(`/api/groups/${groupId}`)
+      if (refreshed.ok) setGroup(await refreshed.json())
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Erreur")
+    } finally {
+      setLeaving(false)
     }
   }
 
@@ -331,11 +352,22 @@ export default function GroupDetailPage() {
 
         {isMember && (
           <Card className="mt-6 border-green-200 dark:border-green-800">
-            <CardContent className="pt-6">
-              <p className="text-center text-green-600 font-medium flex items-center justify-center gap-2">
-                <CheckCircle className="h-5 w-5" />
-                Vous êtes membre de ce groupe
-              </p>
+            <CardContent>
+              <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-between">
+                <p className="text-green-600 font-medium flex items-center gap-2">
+                  <CheckCircle className="h-5 w-5" />
+                  Vous êtes membre de ce groupe
+                </p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={leaving}
+                  onClick={handleLeave}
+                  className="shrink-0 text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700 dark:border-red-800 dark:hover:bg-red-950"
+                >
+                  {leaving ? "En cours..." : "Quitter le groupe"}
+                </Button>
+              </div>
             </CardContent>
           </Card>
         )}
