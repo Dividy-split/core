@@ -1,18 +1,18 @@
-import Link from "next/link"
-import { ArrowRight, Check, CreditCard, Shield, Users } from "lucide-react"
+import Link from "next/link";
+import { ArrowRight, Check, CreditCard, Shield, Users } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { HomeSidebar } from "@/components/ui/home-sidebar"
-import { ScrollToTopButton } from "@/components/ui/scroll-to-top-button"
-import { Separator } from "@/components/ui/separator"
+} from "@/components/ui/card";
+import { HomeSidebar } from "@/components/ui/home-sidebar";
+import { ScrollToTopButton } from "@/components/ui/scroll-to-top-button";
+import { Separator } from "@/components/ui/separator";
 
 const savingsExamples = [
   {
@@ -43,7 +43,7 @@ const savingsExamples = [
     saving: "45,37EUR",
     note: "4 personnes",
   },
-]
+];
 
 const featureCards = [
   {
@@ -70,7 +70,7 @@ const featureCards = [
       "L'outil est pense pour des vrais usages: amis, colocs, couples, fratries ou petites equipes.",
     icon: CreditCard,
   },
-]
+];
 
 export default function Home() {
   return (
@@ -86,7 +86,9 @@ export default function Home() {
             </div>
             <div>
               <p className="text-sm font-semibold tracking-tight">Dividy</p>
-              <p className="text-xs text-zinc-500">Partage d&apos;abonnements</p>
+              <p className="text-xs text-zinc-500">
+                Partage d&apos;abonnements
+              </p>
             </div>
           </Link>
 
@@ -135,6 +137,15 @@ export default function Home() {
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
+              <Link href="/platforms">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="w-full border-zinc-300 bg-white/80 px-6 text-base sm:w-auto"
+                >
+                  Voir les plateformes
+                </Button>
+              </Link>
               <Link href="/sign-in">
                 <Button
                   size="lg"
@@ -149,15 +160,21 @@ export default function Home() {
             <div className="mt-10 grid gap-4 text-sm text-zinc-600 sm:grid-cols-3">
               <div className="rounded-2xl border border-white/70 bg-white/70 p-4 shadow-sm backdrop-blur">
                 <p className="text-2xl font-semibold text-zinc-950">4 min</p>
-                <p className="mt-1">pour ouvrir un groupe autour d&apos;un abonnement</p>
+                <p className="mt-1">
+                  pour ouvrir un groupe autour d&apos;un abonnement
+                </p>
               </div>
               <div className="rounded-2xl border border-white/70 bg-white/70 p-4 shadow-sm backdrop-blur">
                 <p className="text-2xl font-semibold text-zinc-950">1 espace</p>
-                <p className="mt-1">pour suivre qui partage le service et a quel prix</p>
+                <p className="mt-1">
+                  pour suivre qui partage le service et a quel prix
+                </p>
               </div>
               <div className="rounded-2xl border border-white/70 bg-white/70 p-4 shadow-sm backdrop-blur">
                 <p className="text-2xl font-semibold text-zinc-950">0 flou</p>
-                <p className="mt-1">sur qui paie quoi et qui doit encore agir</p>
+                <p className="mt-1">
+                  sur qui paie quoi et qui doit encore agir
+                </p>
               </div>
             </div>
           </div>
@@ -168,7 +185,9 @@ export default function Home() {
               <CardHeader className="border-b border-zinc-100 bg-zinc-50/80">
                 <div className="flex items-center justify-between gap-4">
                   <div>
-                    <CardTitle className="text-xl">Groupe Netflix Premium</CardTitle>
+                    <CardTitle className="text-xl">
+                      Groupe Netflix Premium
+                    </CardTitle>
                     <CardDescription>
                       3 participants deja dans le groupe
                     </CardDescription>
@@ -196,7 +215,9 @@ export default function Home() {
                   <div className="flex items-center justify-between rounded-2xl border border-zinc-200 p-4">
                     <div>
                       <p className="font-medium">Prix total</p>
-                      <p className="text-sm text-zinc-500">Abonnement mensuel</p>
+                      <p className="text-sm text-zinc-500">
+                        Abonnement mensuel
+                      </p>
                     </div>
                     <p className="font-semibold text-zinc-950">22,99EUR</p>
                   </div>
@@ -204,7 +225,8 @@ export default function Home() {
                     <div>
                       <p className="font-medium">Places occupees</p>
                       <p className="text-sm text-zinc-500">
-                        Ajoute encore une personne pour reduire les frais par membre
+                        Ajoute encore une personne pour reduire les frais par
+                        membre
                       </p>
                     </div>
                     <p className="shrink-0 whitespace-nowrap pl-4 text-right text-2xl font-semibold text-zinc-950">
@@ -214,7 +236,9 @@ export default function Home() {
                   <div className="flex items-center justify-between rounded-2xl border border-zinc-200 p-4">
                     <div>
                       <p className="font-medium">Mode d&apos;entree</p>
-                      <p className="text-sm text-zinc-500">Validation manuelle par le createur du groupe</p>
+                      <p className="text-sm text-zinc-500">
+                        Validation manuelle par le createur du groupe
+                      </p>
                     </div>
                     <p className="shrink-0 whitespace-nowrap pl-4 text-right text-2xl font-semibold text-zinc-950">
                       Prive
@@ -247,8 +271,8 @@ export default function Home() {
                 </div>
                 <CardTitle>Creer le groupe</CardTitle>
                 <CardDescription>
-                  Tu ouvres un groupe pour un abonnement precis, pas une pile
-                  de services melanges.
+                  Tu ouvres un groupe pour un abonnement precis, pas une pile de
+                  services melanges.
                 </CardDescription>
               </CardHeader>
               <CardContent className="text-sm leading-7 text-zinc-600">
@@ -294,10 +318,7 @@ export default function Home() {
           <Separator className="bg-zinc-200" />
         </div>
 
-        <section
-          id="savings"
-          className="mx-auto max-w-6xl px-4 py-16 sm:px-6"
-        >
+        <section id="savings" className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
           <div className="mb-10 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-2xl">
               <Badge variant="outline" className="mb-4 rounded-full px-3 py-1">
@@ -352,10 +373,7 @@ export default function Home() {
           <Separator className="bg-zinc-200" />
         </div>
 
-        <section
-          id="features"
-          className="mx-auto max-w-6xl px-4 py-16 sm:px-6"
-        >
+        <section id="features" className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
           <div className="mb-10 max-w-2xl">
             <Badge variant="outline" className="mb-4 rounded-full px-3 py-1">
               Pourquoi Dividy
@@ -367,7 +385,7 @@ export default function Home() {
 
           <div className="grid gap-5 md:grid-cols-2">
             {featureCards.map((feature) => {
-              const Icon = feature.icon
+              const Icon = feature.icon;
 
               return (
                 <Card
@@ -386,7 +404,7 @@ export default function Home() {
                     </div>
                   </CardHeader>
                 </Card>
-              )
+              );
             })}
           </div>
 
@@ -429,5 +447,5 @@ export default function Home() {
         </section>
       </main>
     </div>
-  )
+  );
 }
