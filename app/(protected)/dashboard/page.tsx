@@ -108,7 +108,7 @@ export default function DashboardPage() {
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          <Card>
+          <Card className="flex flex-col">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Plus className="h-5 w-5" />
@@ -118,14 +118,14 @@ export default function DashboardPage() {
                 Partagez votre abonnement avec d&apos;autres membres
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="mt-auto">
               <CreateGroupDialog>
                 <Button className="w-full">Nouveau groupe</Button>
               </CreateGroupDialog>
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="flex flex-col">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Users className="h-5 w-5" />
@@ -135,7 +135,7 @@ export default function DashboardPage() {
                 Parcourez les offres disponibles
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="mt-auto">
               <Button
                 variant="outline"
                 className="w-full"
@@ -146,28 +146,18 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="flex flex-col">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Crown className="h-5 w-5" />
                 Mes groupes
               </CardTitle>
-              <CardDescription>
-                {groups.length} groupe{groups.length !== 1 ? "s" : ""} actif{groups.length !== 1 ? "s" : ""}
-              </CardDescription>
             </CardHeader>
-            <CardContent>
-              {loadingGroups ? (
-                <p className="text-sm text-muted-foreground">Chargement...</p>
-              ) : groups.length === 0 ? (
-                <p className="text-sm text-muted-foreground">
-                  Aucun groupe pour le moment
-                </p>
-              ) : (
-                <p className="text-sm text-muted-foreground">
-                  {groups.length} groupe{groups.length !== 1 ? "s" : ""} ci-dessous
-                </p>
-              )}
+            <CardContent className="mt-auto">
+              <div className="flex items-end justify-between">
+                <p className="text-sm text-muted-foreground">Groupes actifs :</p>
+                <p className="text-6xl font-bold">{loadingGroups ? "—" : groups.length}</p>
+              </div>
             </CardContent>
           </Card>
         </div>
