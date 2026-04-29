@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export async function proxy(request: NextRequest) {
-  const internalUrl = new URL("/api/auth/get-session", request.url);
-  internalUrl.protocol = "http:";
+  const port = process.env.PORT || "3000";
+  const internalUrl = new URL(`http://localhost:${port}/api/auth/get-session`);
   const res = await fetch(internalUrl, {
     headers: request.headers,
   });
