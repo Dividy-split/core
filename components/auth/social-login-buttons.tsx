@@ -1,40 +1,39 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { signIn } from "@/lib/auth-client"
-import { useState } from "react"
-import { Loader2 } from "lucide-react"
+import { Button } from "@/components/ui/button";
+import { signIn } from "@/lib/auth-client";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 export function SocialLoginButtons() {
-  const [isLoading, setIsLoading] = useState<string | null>(null)
-  const [error, setError] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSocialLogin = async (provider: "google") => {
-    setIsLoading(provider)
-    setError(null)
+    setIsLoading(provider);
+    setError(null);
     try {
       await signIn.social({
         provider,
         callbackURL: "/onboarding",
-      })
+      });
     } catch (err) {
-      setError(`Erreur de connexion ${provider}. Veuillez réessayer.`)
-      console.error("Social login error:", err)
-      setIsLoading(null)
+      setError(`Erreur de connexion ${provider}. Veuillez réessayer.`);
+      console.error("Social login error:", err);
+      setIsLoading(null);
     }
-  }
+  };
 
   return (
     <div className="space-y-3">
       {error && (
-        <div className="rounded-md bg-red-50 p-3 text-sm text-red-800">
+        <div className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-800">
           {error}
         </div>
       )}
 
       <Button
-        variant="outline"
-        className="w-full"
+        className="w-full bg-green-600 text-white hover:bg-green-700"
         onClick={() => handleSocialLogin("google")}
         disabled={isLoading !== null}
       >
@@ -67,7 +66,6 @@ export function SocialLoginButtons() {
           </>
         )}
       </Button>
-
     </div>
-  )
+  );
 }
