@@ -6,7 +6,17 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+function getTrustedOrigins(): string[] {
+  const extra =
+    process.env.BETTER_AUTH_TRUSTED_ORIGINS?.split(",").map((o) => o.trim()) ??
+    [];
+  return [process.env.NEXT_PUBLIC_APP_URL, ...extra].filter(
+    Boolean,
+  ) as string[];
+}
+
 export const auth = betterAuth({
+  baseURL: process.env.NEXT_PUBLIC_APP_URL,
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
@@ -188,9 +198,7 @@ export const auth = betterAuth({
 
         if ((result as { error?: unknown })?.error) {
           const err = (result as { error: unknown }).error;
-          throw new Error(
-            typeof err === "string" ? err : JSON.stringify(err),
-          );
+          throw new Error(typeof err === "string" ? err : JSON.stringify(err));
         }
       } catch (error) {
         console.error("[auth] Failed to send verification email:", error);
@@ -229,6 +237,8 @@ export const auth = betterAuth({
     },
   },
 
+  trustedOrigins: getTrustedOrigins(),
+
   hooks: {
     before: createAuthMiddleware(async (ctx) => {
       if (ctx.path !== "/sign-up/email") {
@@ -251,7 +261,13 @@ export const auth = betterAuth({
   },
 
   callbacks: {
-    session: async ({ session, user }: { session: { user: Record<string, unknown> } & Record<string, unknown>; user: Record<string, unknown> }) => {
+    session: async ({
+      session,
+      user,
+    }: {
+      session: { user: Record<string, unknown> } & Record<string, unknown>;
+      user: Record<string, unknown>;
+    }) => {
       return {
         ...session,
         user: {
