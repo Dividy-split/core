@@ -6,6 +6,11 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+function getTrustedOrigins(): string[] {
+  const extra = process.env.BETTER_AUTH_TRUSTED_ORIGINS?.split(",").map((o) => o.trim()) ?? [];
+  return [process.env.NEXT_PUBLIC_APP_URL, ...extra].filter(Boolean) as string[];
+}
+
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
@@ -228,6 +233,8 @@ export const auth = betterAuth({
       generateId: () => crypto.randomUUID(),
     },
   },
+
+  trustedOrigins: getTrustedOrigins(),
 
   hooks: {
     before: createAuthMiddleware(async (ctx) => {
