@@ -1,0 +1,58 @@
+<mxfile host="65bd71144e">
+    <diagram id="http-path" name="Chemin HTTP">
+        <mxGraphModel dx="959" dy="923" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="600" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title" value="Chemin HTTP — utilisateur jusqu&#39;au conteneur" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1;fontColor=#333333;" parent="1" vertex="1">
+                    <mxGeometry x="240" y="30" width="700" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="user" value="Utilisateur&#xa;(navigateur)" style="rounded=12;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1976D2;fontSize=13;fontStyle=1;fontColor=#0D47A1;shadow=1;" parent="1" vertex="1">
+                    <mxGeometry x="206" y="320" width="130" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="dns-public" value="DNS public&lt;br&gt;(OVH)" style="rounded=12;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;fontSize=13;fontStyle=1;fontColor=#4A148C;shadow=1;" parent="1" vertex="1">
+                    <mxGeometry x="129" y="140" width="140" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="dns-scalingo" value="DNS Scalingo" style="rounded=12;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;fontSize=13;fontStyle=1;fontColor=#4A148C;shadow=1;" parent="1" vertex="1">
+                    <mxGeometry x="424" y="140" width="140" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="scalingo-box" value="Scalingo" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#999999;dashed=1;verticalAlign=top;fontSize=14;fontStyle=1;fontColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="430" y="260" width="494" height="169" as="geometry"/>
+                </mxCell>
+                <mxCell id="router" value="Routeur Scalingo&#xa;(terminaison TLS)" style="rounded=12;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#F9A825;fontSize=13;fontStyle=1;fontColor=#F57F17;shadow=1;" parent="1" vertex="1">
+                    <mxGeometry x="470" y="320" width="170" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="2" value="" style="edgeStyle=none;html=1;" parent="1" source="container" target="router" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="container" value="Conteneur&#xa;Next.js&#xa;(écoute sur $PORT)" style="rounded=12;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#2E7D32;fontSize=13;fontStyle=1;fontColor=#1B5E20;shadow=1;" parent="1" vertex="1">
+                    <mxGeometry x="730" y="310" width="160" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="e1" value="&lt;span&gt;résout www.dividy.fr&lt;/span&gt;" style="endArrow=classic;html=1;rounded=0;fontSize=11;strokeColor=#555555;strokeWidth=2;fontStyle=1;" parent="1" source="user" target="dns-public" edge="1">
+                    <mxGeometry x="-0.0006" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e2" value="&lt;span&gt;CNAME vers&lt;br&gt;*.osc-fr1.scalingo.io&lt;/span&gt;" style="endArrow=classic;html=1;rounded=0;fontSize=11;strokeColor=#555555;strokeWidth=2;fontStyle=1;" parent="1" source="dns-public" target="dns-scalingo" edge="1">
+                    <mxGeometry x="0.0051" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e3" value="&lt;span&gt;renvoie IP&lt;br&gt;du routeur&lt;/span&gt;" style="endArrow=classic;html=1;rounded=0;fontSize=11;strokeColor=#555555;strokeWidth=2;fontStyle=1;dashed=1;" parent="1" source="dns-scalingo" target="user" edge="1">
+                    <mxGeometry x="-0.0042" relative="1" as="geometry">
+                        <Array as="points"/>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e4" value="&lt;span&gt;HTTPS (443)&lt;/span&gt;" style="endArrow=classic;html=1;rounded=0;fontSize=12;strokeColor=#1976D2;strokeWidth=2;fontStyle=1;fontColor=#0D47A1;" parent="1" source="user" target="router" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e5" value="&lt;span&gt;HTTP interne&lt;br&gt;sur $PORT&lt;/span&gt;" style="endArrow=classic;html=1;rounded=0;fontSize=12;strokeColor=#2E7D32;strokeWidth=2;fontStyle=1;fontColor=#1B5E20;" parent="1" source="router" target="container" edge="1">
+                    <mxGeometry x="0.0058" y="20" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
