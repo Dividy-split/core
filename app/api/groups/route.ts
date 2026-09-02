@@ -13,7 +13,11 @@ export async function GET(request: NextRequest) {
     where: {
       OR: [
         { ownerId: session.user.id },
-        { members: { some: { userId: session.user.id, status: "ACTIVE" } } },
+        {
+          members: {
+            some: { userId: session.user.id, status: { in: ["ACTIVE", "PENDING"] } },
+          },
+        },
       ],
     },
     include: {
@@ -28,7 +32,37 @@ export async function GET(request: NextRequest) {
     orderBy: { createdAt: "desc" },
   })
 
-  return NextResponse.json(groups)
+  const groupIds = groups.map((group) => group.id)
+  const ownedGroupIds = groups
+    .filter((group) => group.ownerId === session.user.id)
+    .map((group) => group.id)
+
+  const memberships = await prisma.groupMember.findMany({
+    where: { userId: session.user.id, groupId: { in: groupIds } },
+    select: { groupId: true, status: true },
+  })
+  const statusByGroupId = new Map(memberships.map((m) => [m.groupId, m.status]))
+
+  // Nombre de demandes à traiter, pour signaler à l'admin qu'une action l'attend.
+  const pendingCounts = await prisma.groupMember.groupBy({
+    by: ["groupId"],
+    where: { groupId: { in: ownedGroupIds }, status: "PENDING" },
+    _count: { _all: true },
+  })
+  const pendingByGroupId = new Map(
+    pendingCounts.map((row) => [row.groupId, row._count._all])
+  )
+
+  return NextResponse.json(
+    groups.map((group) => ({
+      ...group,
+      viewerStatus:
+        group.ownerId === session.user.id
+          ? "OWNER"
+          : (statusByGroupId.get(group.id) ?? null),
+      pendingCount: pendingByGroupId.get(group.id) ?? 0,
+    }))
+  )
 }
 
 export async function POST(request: NextRequest) {

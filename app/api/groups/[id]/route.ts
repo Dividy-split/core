@@ -32,5 +32,27 @@ export async function GET(
     return NextResponse.json({ error: "Group not found" }, { status: 404 })
   }
 
-  return NextResponse.json(group)
+  const isOwner = group.ownerId === session.user.id
+
+  // Adhésion du visiteur, quel que soit son statut : sans ça l'UI ne peut pas
+  // distinguer "jamais demandé" de "demande en attente" ou "refusée".
+  const viewerMembership = isOwner
+    ? null
+    : await prisma.groupMember.findUnique({
+        where: { groupId_userId: { groupId: id, userId: session.user.id } },
+        select: { id: true, status: true, joinedAt: true },
+      })
+
+  // Seul l'admin du partage voit les demandes à traiter.
+  const pendingRequests = isOwner
+    ? await prisma.groupMember.findMany({
+        where: { groupId: id, status: "PENDING" },
+        include: {
+          user: { select: { id: true, name: true, image: true, createdAt: true } },
+        },
+        orderBy: { joinedAt: "asc" },
+      })
+    : []
+
+  return NextResponse.json({ ...group, isOwner, viewerMembership, pendingRequests })
 }

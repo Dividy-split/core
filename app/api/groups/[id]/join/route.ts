@@ -23,35 +23,49 @@ export async function POST(
   })
 
   if (!group) {
-    return NextResponse.json({ error: "Group not found" }, { status: 404 })
+    return NextResponse.json({ error: "Groupe introuvable" }, { status: 404 })
   }
 
   if (group.ownerId === session.user.id) {
-    return NextResponse.json({ error: "You own this group" }, { status: 400 })
+    return NextResponse.json({ error: "Vous êtes le propriétaire de ce groupe" }, { status: 400 })
   }
 
   const activeMemberCount = group._count.members
   if (activeMemberCount >= group.maxMembers) {
-    return NextResponse.json({ error: "Group is full" }, { status: 400 })
+    return NextResponse.json({ error: "Ce groupe est complet" }, { status: 400 })
   }
 
   const existingMember = await prisma.groupMember.findUnique({
     where: { groupId_userId: { groupId: id, userId: session.user.id } },
   })
 
-  if (existingMember) {
-    return NextResponse.json({ error: "Already a member" }, { status: 400 })
+  if (existingMember?.status === "ACTIVE") {
+    return NextResponse.json({ error: "Vous êtes déjà membre de ce groupe" }, { status: 400 })
+  }
+
+  if (existingMember?.status === "PENDING") {
+    return NextResponse.json(
+      { error: "Votre demande est déjà en attente de validation" },
+      { status: 400 }
+    )
   }
 
   const status = group.instantAcceptance ? "ACTIVE" : "PENDING"
 
-  const member = await prisma.groupMember.create({
-    data: {
-      groupId: id,
-      userId: session.user.id,
-      status,
-    },
-  })
+  // Une demande refusée peut être renvoyée : on réactive la ligne existante
+  // plutôt que d'échouer sur la contrainte unique (groupId, userId).
+  const member = existingMember
+    ? await prisma.groupMember.update({
+        where: { groupId_userId: { groupId: id, userId: session.user.id } },
+        data: { status, joinedAt: new Date() },
+      })
+    : await prisma.groupMember.create({
+        data: {
+          groupId: id,
+          userId: session.user.id,
+          status,
+        },
+      })
 
   return NextResponse.json({ member, status }, { status: 201 })
 }
