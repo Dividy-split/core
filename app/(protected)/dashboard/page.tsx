@@ -45,6 +45,8 @@ interface GroupData {
   _count: {
     members: number;
   };
+  viewerStatus: "OWNER" | "ACTIVE" | "PENDING" | null;
+  pendingCount: number;
 }
 
 export default function DashboardPage() {
@@ -303,12 +305,28 @@ export default function DashboardPage() {
                       <CardTitle className="text-base">
                         {group.platform.name}
                       </CardTitle>
-                      {group.owner.id === session.user.id && (
-                        <Badge className="rounded-full bg-green-100 text-xs text-green-800 hover:bg-green-100">
-                          <Crown className="mr-1 h-3 w-3" />
-                          Owner
-                        </Badge>
-                      )}
+                      <div className="flex shrink-0 items-center gap-2">
+                        {group.viewerStatus === "PENDING" && (
+                          <Badge className="rounded-full bg-amber-100 text-xs text-amber-800 hover:bg-amber-100">
+                            <Clock className="mr-1 h-3 w-3" />
+                            En attente
+                          </Badge>
+                        )}
+                        {group.owner.id === session.user.id &&
+                          group.pendingCount > 0 && (
+                            <Badge className="rounded-full bg-amber-100 text-xs text-amber-800 hover:bg-amber-100">
+                              <Clock className="mr-1 h-3 w-3" />
+                              {group.pendingCount} demande
+                              {group.pendingCount > 1 ? "s" : ""}
+                            </Badge>
+                          )}
+                        {group.owner.id === session.user.id && (
+                          <Badge className="rounded-full bg-green-100 text-xs text-green-800 hover:bg-green-100">
+                            <Crown className="mr-1 h-3 w-3" />
+                            Owner
+                          </Badge>
+                        )}
+                      </div>
                     </div>
                     <CardDescription>{group.planLabel}</CardDescription>
                   </CardHeader>

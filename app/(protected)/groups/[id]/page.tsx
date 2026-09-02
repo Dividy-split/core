@@ -42,6 +42,24 @@ interface MemberData {
   };
 }
 
+interface PendingRequest {
+  id: string;
+  status: string;
+  joinedAt: string;
+  user: {
+    id: string;
+    name: string | null;
+    image: string | null;
+    createdAt: string;
+  };
+}
+
+interface ViewerMembership {
+  id: string;
+  status: "PENDING" | "ACTIVE" | "REJECTED";
+  joinedAt: string;
+}
+
 interface GroupDetail {
   id: string;
   planLabel: string;
@@ -66,6 +84,9 @@ interface GroupDetail {
   };
   members: MemberData[];
   _count: { members: number };
+  isOwner: boolean;
+  viewerMembership: ViewerMembership | null;
+  pendingRequests: PendingRequest[];
 }
 
 function getInitials(name: string | null): string {
@@ -109,6 +130,9 @@ export default function GroupDetailPage() {
   const [joining, setJoining] = useState(false);
   const [leaving, setLeaving] = useState(false);
   const [showMembers, setShowMembers] = useState(true);
+  const [processingRequestId, setProcessingRequestId] = useState<string | null>(
+    null,
+  );
 
   useEffect(() => {
     if (!isPending && !session) {
@@ -131,6 +155,11 @@ export default function GroupDetailPage() {
       .finally(() => setLoading(false));
   }, [session, groupId, router]);
 
+  async function refreshGroup() {
+    const refreshed = await fetch(`/api/groups/${groupId}`);
+    if (refreshed.ok) setGroup(await refreshed.json());
+  }
+
   async function handleJoin() {
     setJoining(true);
     try {
@@ -144,11 +173,11 @@ export default function GroupDetailPage() {
       if (data.status === "ACTIVE") {
         toast.success("Vous avez rejoint le groupe !");
       } else {
-        toast.success("Demande envoyée, en attente d'approbation");
+        toast.success("Demande envoyée", {
+          description: "L'admin du partage doit la valider.",
+        });
       }
-      // Refresh group data
-      const refreshed = await fetch(`/api/groups/${groupId}`);
-      if (refreshed.ok) setGroup(await refreshed.json());
+      await refreshGroup();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Erreur");
     } finally {
@@ -156,7 +185,7 @@ export default function GroupDetailPage() {
     }
   }
 
-  async function handleLeave() {
+  async function handleLeave(pendingRequest = false) {
     setLeaving(true);
     try {
       const res = await fetch(`/api/groups/${groupId}/leave`, {
@@ -166,13 +195,36 @@ export default function GroupDetailPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
 
-      toast.success("Vous avez quitté le groupe");
-      const refreshed = await fetch(`/api/groups/${groupId}`);
-      if (refreshed.ok) setGroup(await refreshed.json());
+      toast.success(
+        pendingRequest ? "Demande annulée" : "Vous avez quitté le groupe",
+      );
+      await refreshGroup();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Erreur");
     } finally {
       setLeaving(false);
+    }
+  }
+
+  async function handleRequest(memberId: string, action: "accept" | "reject") {
+    setProcessingRequestId(memberId);
+    try {
+      const res = await fetch(`/api/groups/${groupId}/requests/${memberId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+
+      toast.success(
+        action === "accept" ? "Demande acceptée" : "Demande refusée",
+      );
+      await refreshGroup();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Erreur");
+    } finally {
+      setProcessingRequestId(null);
     }
   }
 
@@ -209,7 +261,10 @@ export default function GroupDetailPage() {
   }
 
   const isOwner = group.owner.id === session.user.id;
-  const isMember = group.members.some((m) => m.user.id === session.user.id);
+  const isMember = group.viewerMembership?.status === "ACTIVE";
+  const hasPendingRequest = group.viewerMembership?.status === "PENDING";
+  const wasRejected = group.viewerMembership?.status === "REJECTED";
+  const pendingRequests = group.pendingRequests ?? [];
   const isFull = group._count.members >= group.maxMembers;
   const spotsLeft = group.maxMembers - group._count.members;
   const occupancy = Math.min(
@@ -460,8 +515,137 @@ export default function GroupDetailPage() {
           </Card>
         </div>
 
+        {/* Demandes en attente (admin du groupe) */}
+        {isOwner && (
+          <Card className="mt-6 rounded-3xl border-zinc-200 bg-white/85 shadow-sm">
+            <CardHeader>
+              <CardTitle className="text-base flex items-center gap-2">
+                <Clock className="h-4 w-4" />
+                Demandes en attente ({pendingRequests.length})
+              </CardTitle>
+              <CardDescription>
+                {pendingRequests.length > 0
+                  ? "Acceptez ou refusez les personnes qui souhaitent rejoindre votre partage."
+                  : "Aucune demande à traiter pour le moment."}
+              </CardDescription>
+            </CardHeader>
+            {pendingRequests.length > 0 && (
+              <CardContent className="space-y-3">
+                {pendingRequests.map((request) => (
+                  <div
+                    key={request.id}
+                    className="flex flex-col gap-3 rounded-2xl border border-zinc-200 bg-white p-3 sm:flex-row sm:items-center"
+                  >
+                    <Avatar>
+                      <AvatarImage src={request.user.image || undefined} />
+                      <AvatarFallback>
+                        {getInitials(request.user.name)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium truncate">
+                        {request.user.name || "Utilisateur"}
+                      </p>
+                      <p className="text-xs text-zinc-500 flex items-center gap-1">
+                        <CalendarDays className="h-3 w-3" />
+                        Demande du{" "}
+                        {new Date(request.joinedAt).toLocaleDateString("fr-FR")}
+                      </p>
+                    </div>
+                    <div className="flex shrink-0 gap-2">
+                      <Button
+                        size="sm"
+                        disabled={processingRequestId === request.id || isFull}
+                        onClick={() => handleRequest(request.id, "accept")}
+                        className="bg-green-600 text-white hover:bg-green-700"
+                      >
+                        <CheckCircle className="mr-1 h-4 w-4" />
+                        Accepter
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        disabled={processingRequestId === request.id}
+                        onClick={() => handleRequest(request.id, "reject")}
+                        className="border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
+                      >
+                        Refuser
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+                {isFull && (
+                  <p className="text-xs text-zinc-500">
+                    Le groupe est complet : libérez une place pour accepter une
+                    nouvelle demande.
+                  </p>
+                )}
+              </CardContent>
+            )}
+          </Card>
+        )}
+
+        {/* Demande en attente (côté demandeur) */}
+        {hasPendingRequest && (
+          <Card className="mt-6 rounded-3xl border-amber-200 bg-amber-50/70 shadow-sm">
+            <CardContent>
+              <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-between">
+                <div>
+                  <p className="flex items-center gap-2 font-medium text-amber-800">
+                    <Clock className="h-5 w-5" />
+                    Demande envoyée, en attente de validation
+                  </p>
+                  <p className="mt-1 text-sm text-amber-700">
+                    L&apos;admin du partage doit accepter votre demande avant
+                    que vous rejoigniez le groupe.
+                  </p>
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={leaving}
+                  onClick={() => handleLeave(true)}
+                  className="shrink-0 border-amber-300 bg-white/80 text-amber-800 hover:bg-amber-100"
+                >
+                  {leaving ? "En cours..." : "Annuler ma demande"}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Demande refusée */}
+        {wasRejected && (
+          <Card className="mt-6 rounded-3xl border-red-200 bg-red-50/70 shadow-sm">
+            <CardContent>
+              <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-between">
+                <div>
+                  <p className="font-medium text-red-700">
+                    Votre demande a été refusée
+                  </p>
+                  <p className="mt-1 text-sm text-red-600">
+                    Vous pouvez envoyer une nouvelle demande à l&apos;admin.
+                  </p>
+                </div>
+                <Button
+                  size="sm"
+                  disabled={isFull || joining}
+                  onClick={handleJoin}
+                  className="shrink-0 bg-green-600 text-white hover:bg-green-700"
+                >
+                  {joining
+                    ? "En cours..."
+                    : isFull
+                      ? "Groupe complet"
+                      : "Renvoyer une demande"}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Join Button */}
-        {!isOwner && !isMember && (
+        {!isOwner && !isMember && !hasPendingRequest && !wasRejected && (
           <Card className="mt-6 rounded-3xl border-zinc-200 bg-white/85 shadow-sm">
             <CardContent className="pt-6">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -502,7 +686,7 @@ export default function GroupDetailPage() {
                   variant="outline"
                   size="sm"
                   disabled={leaving}
-                  onClick={handleLeave}
+                  onClick={() => handleLeave()}
                   className="shrink-0 border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
                 >
                   {leaving ? "En cours..." : "Quitter le groupe"}
