@@ -97,7 +97,14 @@ export function HomeSidebar() {
   return (
     <>
       {/* Version Desktop */}
-      <div className="fixed left-6 top-1/2 -translate-y-1/2 z-40 hidden lg:block">
+      {/*
+        Seuil 1600px : le contenu de la page fait max-w-6xl (1152px) centre, donc
+        la goutiere disponible vaut (viewport - 1152) / 2. La sidebar occupe
+        ~215px (left-6 + pastille + ml-4 + label le plus long, "Comment ca marche").
+        En dessous de 1600px la goutiere passe sous 215px et la sidebar recouvre
+        le contenu : on bascule alors sur le menu flottant.
+      */}
+      <div className="fixed left-6 top-1/2 -translate-y-1/2 z-40 hidden min-[1600px]:block">
         <nav className="relative">
           {/* Fil vertical centré par rapport aux bornes */}
           <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-zinc-300 dark:bg-zinc-600"></div>
@@ -151,8 +158,8 @@ export function HomeSidebar() {
         </nav>
       </div>
 
-      {/* Version Mobile */}
-      <div className="lg:hidden">
+      {/* Version Mobile / ecrans sans place pour la sidebar */}
+      <div className="min-[1600px]:hidden">
         {/* Bouton flottant */}
         <Button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
